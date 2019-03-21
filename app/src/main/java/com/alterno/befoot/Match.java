@@ -1,15 +1,21 @@
 package com.alterno.befoot;
 
 import android.media.Image;
+import android.widget.ImageView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class Match {
@@ -18,9 +24,14 @@ public class Match {
     private String awayTeam;
     private String homeTeamScore;
     private String awayTeamScore;
-    private Image homeTeamImg;
-    private Image awayTeamImg;
+
     private League matchLeague;
+    private String matchStatus;
+    private String matchDay;
+    private String matchDate;
+
+    private ImageView homeTeamImg;
+    private ImageView awayTeamImg;
 
     public Match(String homeTeam, String awayTeam, String homeTeamScore, String awayTeamScore) {
         this.homeTeam = homeTeam;
@@ -29,7 +40,17 @@ public class Match {
         this.awayTeamScore = awayTeamScore;
     }
 
-    public Match(String homeTeam, String awayTeam, String homeTeamScore, String awayTeamScore, Image homeTeamImg, Image awayTeamImg, League matchLeague) {
+    public Match(String homeTeam, String awayTeam, String homeTeamScore, String awayTeamScore, String matchStatus, String matchDay, String matchDate) {
+        this.homeTeam = homeTeam;
+        this.awayTeam = awayTeam;
+        this.homeTeamScore = homeTeamScore;
+        this.awayTeamScore = awayTeamScore;
+        this.matchStatus = matchStatus;
+        this.matchDay = matchDay;
+        this.matchDate = matchDate;
+    }
+
+    public Match(String homeTeam, String awayTeam, String homeTeamScore, String awayTeamScore, ImageView homeTeamImg, ImageView awayTeamImg, League matchLeague) {
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
         this.homeTeamScore = homeTeamScore;
@@ -39,27 +60,42 @@ public class Match {
         this.matchLeague = matchLeague;
     }
 
-    public List<Match> GetMatchOfTheDay(){
-
-        String url = "";
-
-        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try{
-                    JSONArray listMatch = response.getJSONArray("matches");
-
-                    for(int i = 0; i < listMatch.length();i++){
-
-                    }
-                }
-                catch (JSONException e){
-                    e.printStackTrace();
-                }
-            }
-        })
+    public Match(String homeTeam, String awayTeam, String homeTeamScore, String awayTeamScore, League matchLeague, String matchStatus, String matchDay, String matchDate, ImageView homeTeamImg, ImageView awayTeamImg) {
+        this.homeTeam = homeTeam;
+        this.awayTeam = awayTeam;
+        this.homeTeamScore = homeTeamScore;
+        this.awayTeamScore = awayTeamScore;
+        this.matchLeague = matchLeague;
+        this.matchStatus = matchStatus;
+        this.matchDay = matchDay;
+        this.matchDate = matchDate;
+        this.homeTeamImg = homeTeamImg;
+        this.awayTeamImg = awayTeamImg;
     }
 
+    public String getMatchStatus() {
+        return matchStatus;
+    }
+
+    public void setMatchStatus(String matchStatus) {
+        this.matchStatus = matchStatus;
+    }
+
+    public String getMatchDay() {
+        return matchDay;
+    }
+
+    public void setMatchDay(String matchDay) {
+        this.matchDay = matchDay;
+    }
+
+    public String getMatchDate() {
+        return matchDate;
+    }
+
+    public void setMatchDate(String matchDate) {
+        this.matchDate = matchDate;
+    }
 
 
     // GETTER SETTER
@@ -96,19 +132,19 @@ public class Match {
         this.awayTeamScore = awayTeamScore;
     }
 
-    public Image getHomeTeamImg() {
+    public ImageView getHomeTeamImg() {
         return homeTeamImg;
     }
 
-    public void setHomeTeamImg(Image homeTeamImg) {
+    public void setHomeTeamImg(ImageView homeTeamImg) {
         this.homeTeamImg = homeTeamImg;
     }
 
-    public Image getAwayTeamImg() {
+    public ImageView getAwayTeamImg() {
         return awayTeamImg;
     }
 
-    public void setAwayTeamImg(Image awayTeamImg) {
+    public void setAwayTeamImg(ImageView awayTeamImg) {
         this.awayTeamImg = awayTeamImg;
     }
 

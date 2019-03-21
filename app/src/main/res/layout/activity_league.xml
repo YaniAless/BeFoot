@@ -7,13 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".MatchActivity">
 
-    <ListView
-        android:id="@+id/listMatches"
-        android:layout_width="wrap_content"
-        android:layout_height="675dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="56dp" />
-
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="0dp"
@@ -27,9 +20,14 @@
         app:menu="@menu/navigation" />
 
     <TextView
-        android:id="@+id/matchesDate"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:id="@+id/leaguetitle"
+        android:layout_width="413dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/title_leagues"
+        android:textSize="50dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
 
 
 </android.support.constraint.ConstraintLayout>
