@@ -142,24 +142,14 @@ public class MatchActivity extends AppCompatActivity {
         }){
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
+            String key = BuildConfig.ApiKey;
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("Content-Type", "application/json");
-                params.put("X-Auth-Token","98d4c03b623847c2b648fcb3f8c4b059");
+                params.put("X-Auth-Token",key);
                 return params;
             }
         };
         queue.add(matchesReq);
     }
-
-    // TODO : Remplacer le core de la méthode par les appels API
-    /*private List<Match> genererMatch(){
-        List<Match> matches = new ArrayList<>();
-
-        matches.add(new Match("Dijon","PSG","0","4"));
-        matches.add(new Match("Juventus","Atletico Madrid","3","0"));
-        matches.add(new Match("Manchester City","Schalke 04","7","0"));
-
-        return matches;
-    }*/
 
 }
