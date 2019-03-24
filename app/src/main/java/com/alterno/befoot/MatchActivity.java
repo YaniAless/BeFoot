@@ -21,12 +21,10 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,53 +57,60 @@ public class MatchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        GetMatchOfTheDay();
         setContentView(R.layout.activity_main);
+
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
         matchDate = (TextView) findViewById(R.id.matchesDate);
         matchDate.setText(GetCurrentDate());
 
         listMatches = (ListView) findViewById(R.id.listMatches);
-        List<Match> matches = GetMatchOfTheDay();
-        if(matches.size() > 0){
-            MatchAdapter adapter = new MatchAdapter(MatchActivity.this,matches);
-            listMatches.setAdapter(adapter);
-        }
-        else
-            Log.i("TESTS", "No matches found");
-
-
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
     private String GetCurrentDate(){
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/London"));
+        Calendar calendar = Calendar.getInstance();
         String currentDate = DateFormat.getDateInstance(DateFormat.SHORT).format(calendar.getTime());
 
         return currentDate;
     }
 
-    public List<Match> GetMatchOfTheDay(){
+    private void DisplayMatchesOfTheDay(List<Match> matchesList){
+        if(matchesList.size() > 0){
+            MatchAdapter adapter = new MatchAdapter(MatchActivity.this,matchesList);
+            listMatches.setAdapter(adapter);
+            Log.i("TESTS", "Matches list : " + matchesList.size());
+        }
+        else
+            Log.i("TESTS", "No matches found");
+    }
+
+    private void GetMatchOfTheDay(){
 
         RequestQueue queue = Volley.newRequestQueue(this);
 
-        String date = "2019-04-05";
+        String url = "http://api.football-data.org/v2/competitions/FL1/matches?";
+        String myDate = "2019-04-05";
+        StringBuilder sbUrl = new StringBuilder();
+        sbUrl.append(url);
+        sbUrl.append("dateFrom=" + myDate);
+        sbUrl.append("&dateTo=" + myDate);
 
-        String url = "http://api.football-data.org/v2/competitions/FL1/matches?dateFrom="+date+"&dateTo="+date;
+        //Log.i("TESTS","sbURL " + sbUrl.toString());
 
-        Log.i("TESTS", url);
-
-        final List<Match> matchesList = new ArrayList<>();
-
-        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest matchesReq = new JsonObjectRequest(Request.Method.GET, sbUrl.toString(), null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try{
+                    List<Match> matchesList = new ArrayList<>();
+
                     JSONArray arrMatches = response.getJSONArray("matches");
-                    String league = response.getString("name");
+                    //String league = response.getString("name");
+                    //Log.i("TESTS","Response : " + response.toString());
 
                     for (int i = 0; i < arrMatches.length();i++){
                         JSONObject match = arrMatches.getJSONObject(i);
-
 
                         String homeTeam = match.getJSONObject("homeTeam").getString("name");
                         String awayTeam = match.getJSONObject("awayTeam").getString("name");
@@ -116,9 +121,6 @@ public class MatchActivity extends AppCompatActivity {
                         String matchDay = match.getString("matchday");
                         String matchDate = match.getString("utcDate");
 
-                        Log.i("TESTS","Date : " + matchDate);
-
-
                         //League matchLeague = league;
                         //ImageView homeTeamImg = match.getString();
                         //ImageView awayTeamImg = match.getString();
@@ -126,6 +128,7 @@ public class MatchActivity extends AppCompatActivity {
                         Match matchOfTheDay = new Match(homeTeam,awayTeam,homeTeamScore,awayTeamScore,matchStatus,matchDay,matchDate);
                         matchesList.add(matchOfTheDay);
                     }
+                    DisplayMatchesOfTheDay(matchesList);
                 }
                 catch (JSONException e){
                     e.printStackTrace();
@@ -139,18 +142,17 @@ public class MatchActivity extends AppCompatActivity {
         }){
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<String,String>();
-                headers.put("Content-Type","application/json");
-                headers.put("X-Auth-Token","98d4c03b623847c2b648fcb3f8c4b059");
-                return headers;
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json");
+                params.put("X-Auth-Token","98d4c03b623847c2b648fcb3f8c4b059");
+                return params;
             }
         };
-        queue.add(req);
-        return matchesList;
+        queue.add(matchesReq);
     }
 
     // TODO : Remplacer le core de la méthode par les appels API
-    private List<Match> genererMatch(){
+    /*private List<Match> genererMatch(){
         List<Match> matches = new ArrayList<>();
 
         matches.add(new Match("Dijon","PSG","0","4"));
@@ -158,6 +160,6 @@ public class MatchActivity extends AppCompatActivity {
         matches.add(new Match("Manchester City","Schalke 04","7","0"));
 
         return matches;
-    }
+    }*/
 
 }
