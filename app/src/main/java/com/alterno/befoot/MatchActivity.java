@@ -91,7 +91,7 @@ public class MatchActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
 
         String url = "http://api.football-data.org/v2/competitions/FL1/matches?";
-        String myDate = "2019-04-05";
+        String myDate = "2019-03-31";
         StringBuilder sbUrl = new StringBuilder();
         sbUrl.append(url);
         sbUrl.append("dateFrom=" + myDate);
@@ -116,6 +116,11 @@ public class MatchActivity extends AppCompatActivity {
                         String awayTeam = match.getJSONObject("awayTeam").getString("name");
                         String homeTeamScore = match.getJSONObject("score").getJSONObject("fullTime").getString("homeTeam");
                         String awayTeamScore = match.getJSONObject("score").getJSONObject("fullTime").getString("awayTeam");
+
+                        if(homeTeamScore == "null" || awayTeamScore == "null"){
+                            homeTeamScore = "0";
+                            awayTeamScore = "0";
+                        }
 
                         String matchStatus = match.getString("status");
                         String matchDay = match.getString("matchday");
