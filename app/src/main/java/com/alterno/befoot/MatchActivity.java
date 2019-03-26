@@ -1,13 +1,18 @@
 package com.alterno.befoot;
 
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -34,6 +39,7 @@ public class MatchActivity extends AppCompatActivity {
 
     private ListView listMatches;
     private TextView matchDate;
+    private Spinner leagueSelector;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -66,6 +72,13 @@ public class MatchActivity extends AppCompatActivity {
         matchDate = (TextView) findViewById(R.id.matchesDate);
         matchDate.setText(GetCurrentDate());
 
+
+        /* Start code for league selector
+        leagueSelector = (Spinner) findViewById(R.id.leagueSelector);
+        SpinnerAdapter SpinnerAdapter =
+
+        leagueSelector.set*/
+
         listMatches = (ListView) findViewById(R.id.listMatches);
     }
 
@@ -84,6 +97,10 @@ public class MatchActivity extends AppCompatActivity {
         }
         else
             Log.i("TESTS", "No matches found");
+    }
+
+    private void BuildDateForApi(){
+
     }
 
     private void GetMatchOfTheDay(){
