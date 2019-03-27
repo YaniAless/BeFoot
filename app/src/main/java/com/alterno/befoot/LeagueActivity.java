@@ -75,6 +75,11 @@ public class LeagueActivity extends AppCompatActivity {
     private View.OnClickListener L1Listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            buttonL1.setVisibility(View.GONE);
+            buttonSA.setVisibility(View.GONE);
+            buttonPL.setVisibility(View.GONE);
+            buttonLIGA.setVisibility(View.GONE);
+            buttonBL.setVisibility(View.GONE);
             teamRanking.setText(" "); //vider le textView
             GetRanking("FL1");
 
@@ -83,6 +88,11 @@ public class LeagueActivity extends AppCompatActivity {
     private View.OnClickListener SAListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            buttonL1.setVisibility(View.GONE);
+            buttonSA.setVisibility(View.GONE);
+            buttonPL.setVisibility(View.GONE);
+            buttonLIGA.setVisibility(View.GONE);
+            buttonBL.setVisibility(View.GONE);
             teamRanking.setText(" ");
             GetRanking("SA");
 
@@ -92,6 +102,11 @@ public class LeagueActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             teamRanking.setText(" ");
+            buttonL1.setVisibility(View.GONE);
+            buttonSA.setVisibility(View.GONE);
+            buttonPL.setVisibility(View.GONE);
+            buttonLIGA.setVisibility(View.GONE);
+            buttonBL.setVisibility(View.GONE);
             GetRanking("BL1");
 
         }
@@ -99,6 +114,11 @@ public class LeagueActivity extends AppCompatActivity {
     private View.OnClickListener PLListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            buttonL1.setVisibility(View.GONE);
+            buttonSA.setVisibility(View.GONE);
+            buttonPL.setVisibility(View.GONE);
+            buttonLIGA.setVisibility(View.GONE);
+            buttonBL.setVisibility(View.GONE);
             teamRanking.setText(" ");
             GetRanking("PL");
 
@@ -107,6 +127,11 @@ public class LeagueActivity extends AppCompatActivity {
     private View.OnClickListener LIGAListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            buttonL1.setVisibility(View.GONE);
+            buttonSA.setVisibility(View.GONE);
+            buttonPL.setVisibility(View.GONE);
+            buttonLIGA.setVisibility(View.GONE);
+            buttonBL.setVisibility(View.GONE);
             teamRanking.setText(" ");
             GetRanking("PD");
 
@@ -130,6 +155,7 @@ public class LeagueActivity extends AppCompatActivity {
 
                     JSONArray jsonArray = response.getJSONArray("standings"); // on se positionne dans l'array standings (classement)
 
+
                     for (int i = 0; i < 20; i++) {
                         JSONObject standings = jsonArray.getJSONObject(0); //on se positionne au 1er objet (classement général)
                         JSONArray table = standings.getJSONArray("table");
@@ -137,7 +163,13 @@ public class LeagueActivity extends AppCompatActivity {
                         JSONObject team1 = team.getJSONObject("team");
                         String nameTeam = team1.getString("name");
                         String points = team.getString("points");
-                        teamRanking.append(i+1+") "+ nameTeam + "  " +points + " pts" +"\n");
+                        String goalDifference = team.getString("goalDifference");
+
+                        if(i==0)
+                        {
+                            teamRanking.append("     Equipe            NbPoints        Diff de but\n\n");
+                        }
+                        teamRanking.append(i+1+") "+ nameTeam + "  " +points + " pts" + "      " + goalDifference+ "\n");
 
                     }
 
