@@ -39,6 +39,7 @@ public class MatchActivity extends AppCompatActivity {
 
     private ListView listMatches;
     private TextView matchDate;
+    private TextView noMatchesMsg;
     private Spinner leagueSelector;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -48,12 +49,13 @@ public class MatchActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_matches:
+                    startActivity(new Intent(MatchActivity.this,MatchActivity.class));
                     return true;
                 case R.id.navigation_leagues:
                     startActivity(new Intent(MatchActivity.this,LeagueActivity.class));
                     return true;
                 case R.id.navigation_teams:
-
+                    startActivity(new Intent(MatchActivity.this,TeamActivity.class));
                     return true;
             }
             return false;
@@ -91,12 +93,17 @@ public class MatchActivity extends AppCompatActivity {
 
     private void DisplayMatchesOfTheDay(List<Match> matchesList){
         if(matchesList.size() > 0){
+            if(noMatchesMsg.getVisibility() == View.VISIBLE)
+                noMatchesMsg.setVisibility(View.INVISIBLE);
             MatchAdapter adapter = new MatchAdapter(MatchActivity.this,matchesList);
             listMatches.setAdapter(adapter);
             Log.i("TESTS", "Matches list : " + matchesList.size());
         }
-        else
-            Log.i("TESTS", "No matches found");
+        else{
+            noMatchesMsg = (TextView) findViewById(R.id.noMatchesMsg);
+            noMatchesMsg.setVisibility(View.VISIBLE);
+            noMatchesMsg.setText(R.string.noMatchesFound);
+        }
     }
 
     private void BuildDateForApi(){
@@ -108,7 +115,7 @@ public class MatchActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
 
         String url = "http://api.football-data.org/v2/competitions/FL1/matches?";
-        String myDate = "2019-03-31";
+        String myDate = "2019-04-02";
         StringBuilder sbUrl = new StringBuilder();
         sbUrl.append(url);
         sbUrl.append("dateFrom=" + myDate);

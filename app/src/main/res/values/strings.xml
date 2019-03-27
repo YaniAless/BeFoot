@@ -11,4 +11,12 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="noMatchesFound">No matches found</string>
+
+    <string-array name="leagueSelectorArray">
+        <item>Ligue 1 Conforama</item>
+        <item>Premier league</item>
+        <item>Liga</item>
+        <item>Serie A</item>
+    </string-array>
 </resources>

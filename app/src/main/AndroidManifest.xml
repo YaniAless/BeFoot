@@ -3,7 +3,7 @@
     package="com.alterno.befoot">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LeagueActivity"></activity>
+        <activity android:name=".TeamActivity"></activity>
+        <activity android:name=".LeagueActivity" />
         <activity
             android:name=".MatchActivity"
             android:label="@string/app_name">
