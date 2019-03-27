@@ -6,6 +6,8 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -19,15 +21,13 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class LeagueActivity extends AppCompatActivity {
     private TextView teamRanking;
+    private Button buttonSA, buttonL1, buttonLIGA, buttonPL, buttonBL;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -52,13 +52,66 @@ public class LeagueActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_league);
-        GetRanking("FL1"); // à faire : choisir son championnat
+        //GetRanking("FL1"); // à faire : choisir son championnat
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         teamRanking = findViewById(R.id.team);
+        buttonL1 = findViewById(R.id.buttonL1);
+        buttonSA = findViewById(R.id.buttonSA);
+        buttonLIGA = findViewById(R.id.buttonLIGA);
+        buttonBL = findViewById(R.id.buttonBL);
+        buttonPL = findViewById(R.id.buttonPL);
+
+
+        buttonL1.setOnClickListener(L1Listener);
+        buttonSA.setOnClickListener(SAListener);
+        buttonLIGA.setOnClickListener(LIGAListener);
+        buttonBL.setOnClickListener(BLListener);
+        buttonPL.setOnClickListener(PLListener);
     }
+
+    private View.OnClickListener L1Listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            teamRanking.setText(" "); //vider le textView
+            GetRanking("FL1");
+
+        }
+    };
+    private View.OnClickListener SAListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            teamRanking.setText(" ");
+            GetRanking("SA");
+
+        }
+    };
+    private View.OnClickListener BLListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            teamRanking.setText(" ");
+            GetRanking("BL1");
+
+        }
+    };
+    private View.OnClickListener PLListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            teamRanking.setText(" ");
+            GetRanking("PL");
+
+        }
+    };
+    private View.OnClickListener LIGAListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            teamRanking.setText(" ");
+            GetRanking("PD");
+
+        }
+    };
 
 
     private void GetRanking(String idLeague){

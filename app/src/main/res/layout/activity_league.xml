@@ -32,6 +32,45 @@
     <TextView
         android:id="@+id/team"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="85dp" />
+
+    <Button
+        android:id="@+id/buttonSA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SA" />
+
+    <Button
+        android:id="@+id/buttonLIGA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/buttonSA"
+        android:layout_marginBottom="-534dp"
+        android:text="LIGA" />
+
+    <Button
+        android:id="@+id/buttonBL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/buttonSA"
+        android:layout_marginBottom="-435dp"
+        android:text="BL" />
+
+    <Button
+        android:id="@+id/buttonPL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/buttonSA"
+        android:layout_marginBottom="-482dp"
+        android:text="PL" />
+
+    <Button
+        android:id="@+id/buttonL1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/buttonSA"
+        android:layout_marginBottom="-581dp"
+        android:text="L1" />
 
 </RelativeLayout>
