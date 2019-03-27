@@ -29,4 +29,9 @@
         android:background="?android:attr/windowBackground"
         app:menu="@menu/navigation" />
 
+    <TextView
+        android:id="@+id/team"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </RelativeLayout>

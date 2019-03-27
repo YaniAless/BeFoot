@@ -2,20 +2,21 @@ package com.alterno.befoot;
 
 public class League {
 
-    private String idLeague;
     private String nameLeague;
+    private String nameTeam;
+    private String nbPoints;
 
-    public League(String idLeague, String nameLeague) {
-        this.idLeague = idLeague;
+    public League(String nameLeague, String nameTeam, String nbPoints) {
         this.nameLeague = nameLeague;
+        this.nameTeam = nameTeam;
+        this.nbPoints = nbPoints;
+
     }
 
-    public String getIdLeague() {
-        return idLeague;
-    }
+    public League(String nameTeam, String nbPoints) {
+        this.nameTeam = nameTeam;
+        this.nbPoints = nbPoints;
 
-    public void setIdLeague(String idLeague) {
-        this.idLeague = idLeague;
     }
 
     public String getNameLeague() {
@@ -26,4 +27,19 @@ public class League {
         this.nameLeague = nameLeague;
     }
 
+    public String getNameTeam() {
+        return nameTeam;
+    }
+
+    public void setNameTeam(String nameTeam) {
+        this.nameTeam = nameTeam;
+    }
+
+    public String getNbPoints() {
+        return nbPoints;
+    }
+
+    public void setNbPoints(String nbPoints) {
+        this.nbPoints = nbPoints;
+    }
 }
