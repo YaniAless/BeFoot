@@ -7,9 +7,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/logo_foot"
+        android:icon="@mipmap/ic_football"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/logo_foot_round"
+        android:roundIcon="@mipmap/ic_football_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".TeamActivity"></activity>

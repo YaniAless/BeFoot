@@ -92,6 +92,7 @@ public class MatchActivity extends AppCompatActivity {
     }
 
     private void DisplayMatchesOfTheDay(List<Match> matchesList){
+        noMatchesMsg = (TextView) findViewById(R.id.noMatchesMsg);
         if(matchesList.size() > 0){
             if(noMatchesMsg.getVisibility() == View.VISIBLE)
                 noMatchesMsg.setVisibility(View.INVISIBLE);
@@ -100,7 +101,6 @@ public class MatchActivity extends AppCompatActivity {
             Log.i("TESTS", "Matches list : " + matchesList.size());
         }
         else{
-            noMatchesMsg = (TextView) findViewById(R.id.noMatchesMsg);
             noMatchesMsg.setVisibility(View.VISIBLE);
             noMatchesMsg.setText(R.string.noMatchesFound);
         }
@@ -115,7 +115,7 @@ public class MatchActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
 
         String url = "http://api.football-data.org/v2/competitions/FL1/matches?";
-        String myDate = "2019-04-02";
+        String myDate = "2019-03-31";
         StringBuilder sbUrl = new StringBuilder();
         sbUrl.append(url);
         sbUrl.append("dateFrom=" + myDate);
