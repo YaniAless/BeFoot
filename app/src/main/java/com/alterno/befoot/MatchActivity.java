@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
@@ -27,6 +28,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -75,11 +77,14 @@ public class MatchActivity extends AppCompatActivity {
         matchDate.setText(GetCurrentDate());
 
 
-        /* Start code for league selector
+        // Start code for league selector
         leagueSelector = (Spinner) findViewById(R.id.leagueSelector);
-        SpinnerAdapter SpinnerAdapter =
 
-        leagueSelector.set*/
+        // We get the array leagueSelectorArray in the string R then we use the default layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.leagueSelectorArray,R.layout.support_simple_spinner_dropdown_item);
+
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        leagueSelector.setAdapter(adapter);
 
         listMatches = (ListView) findViewById(R.id.listMatches);
     }
