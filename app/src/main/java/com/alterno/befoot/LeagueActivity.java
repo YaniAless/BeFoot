@@ -1,13 +1,16 @@
 package com.alterno.befoot;
 
 import android.content.Intent;
+import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -17,17 +20,21 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class LeagueActivity extends AppCompatActivity {
-    private TextView teamRanking;
-    private Button buttonSA, buttonL1, buttonLIGA, buttonPL, buttonBL;
+    private ListView rankingView;
+    private ImageView logoTeam;
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -49,95 +56,25 @@ public class LeagueActivity extends AppCompatActivity {
     };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
+        GetRanking("FL1"); // à faire : choisir son championnat
         setContentView(R.layout.activity_league);
-        //GetRanking("FL1"); // à faire : choisir son championnat
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        //BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        //navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        teamRanking = findViewById(R.id.team);
-        buttonL1 = findViewById(R.id.buttonL1);
-        buttonSA = findViewById(R.id.buttonSA);
-        buttonLIGA = findViewById(R.id.buttonLIGA);
-        buttonBL = findViewById(R.id.buttonBL);
-        buttonPL = findViewById(R.id.buttonPL);
-
-
-        buttonL1.setOnClickListener(L1Listener);
-        buttonSA.setOnClickListener(SAListener);
-        buttonLIGA.setOnClickListener(LIGAListener);
-        buttonBL.setOnClickListener(BLListener);
-        buttonPL.setOnClickListener(PLListener);
+        rankingView = findViewById(R.id.ranking);
+        logoTeam= findViewById(R.id.logoTeam);
     }
 
-    private View.OnClickListener L1Listener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            buttonL1.setVisibility(View.GONE);
-            buttonSA.setVisibility(View.GONE);
-            buttonPL.setVisibility(View.GONE);
-            buttonLIGA.setVisibility(View.GONE);
-            buttonBL.setVisibility(View.GONE);
-            teamRanking.setText(" "); //vider le textView
-            GetRanking("FL1");
-
-        }
-    };
-    private View.OnClickListener SAListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            buttonL1.setVisibility(View.GONE);
-            buttonSA.setVisibility(View.GONE);
-            buttonPL.setVisibility(View.GONE);
-            buttonLIGA.setVisibility(View.GONE);
-            buttonBL.setVisibility(View.GONE);
-            teamRanking.setText(" ");
-            GetRanking("SA");
-
-        }
-    };
-    private View.OnClickListener BLListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            teamRanking.setText(" ");
-            buttonL1.setVisibility(View.GONE);
-            buttonSA.setVisibility(View.GONE);
-            buttonPL.setVisibility(View.GONE);
-            buttonLIGA.setVisibility(View.GONE);
-            buttonBL.setVisibility(View.GONE);
-            GetRanking("BL1");
-
-        }
-    };
-    private View.OnClickListener PLListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            buttonL1.setVisibility(View.GONE);
-            buttonSA.setVisibility(View.GONE);
-            buttonPL.setVisibility(View.GONE);
-            buttonLIGA.setVisibility(View.GONE);
-            buttonBL.setVisibility(View.GONE);
-            teamRanking.setText(" ");
-            GetRanking("PL");
-
-        }
-    };
-    private View.OnClickListener LIGAListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            buttonL1.setVisibility(View.GONE);
-            buttonSA.setVisibility(View.GONE);
-            buttonPL.setVisibility(View.GONE);
-            buttonLIGA.setVisibility(View.GONE);
-            buttonBL.setVisibility(View.GONE);
-            teamRanking.setText(" ");
-            GetRanking("PD");
-
-        }
-    };
-
+    private void DisplayRanking(List<League> ranking)
+    {
+            LeagueAdapter adapter = new LeagueAdapter(LeagueActivity.this,ranking);
+            rankingView.setAdapter(adapter);
+            Log.i("TESTS", "Matches list : " + ranking.size());
+    }
 
     private void GetRanking(String idLeague){
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -148,6 +85,7 @@ public class LeagueActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try{
+                    List<League> ranking = new ArrayList<>();
 
                     //JSONObject jsonObject = response.getJSONObject("competition"); // on se positionne dans l'objet competition
                     //String nameCompetition = jsonObject.getString("name"); // on récupère le nom de la competition
@@ -163,15 +101,17 @@ public class LeagueActivity extends AppCompatActivity {
                         JSONObject team1 = team.getJSONObject("team");
                         String nameTeam = team1.getString("name");
                         String points = team.getString("points");
-                        String goalDifference = team.getString("goalDifference");
+                        String points2 = points + " pts"; // A REFAIRE
 
-                        if(i==0)
-                        {
-                            teamRanking.append("     Equipe            NbPoints        Diff de but\n\n");
-                        }
-                        teamRanking.append(i+1+") "+ nameTeam + "  " +points + " pts" + "      " + goalDifference+ "\n");
+                        String logoTeam = team1.getString("crestUrl");
+
+
+
+                        League league = new League(nameTeam, points2);
+                        ranking.add(league);
 
                     }
+                    DisplayRanking(ranking);
 
 
                 }

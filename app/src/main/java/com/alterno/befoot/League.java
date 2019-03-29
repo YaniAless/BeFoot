@@ -1,31 +1,26 @@
 package com.alterno.befoot;
 
+import android.media.Image;
+
 public class League {
 
-    private String nameLeague;
+
     private String nameTeam;
     private String nbPoints;
+    private Image logoteam;
 
-    public League(String nameLeague, String nameTeam, String nbPoints) {
-        this.nameLeague = nameLeague;
+    public League(String nameTeam, String nbPoints, Image logoteam) {
         this.nameTeam = nameTeam;
         this.nbPoints = nbPoints;
+        this.logoteam = logoteam;
 
     }
 
     public League(String nameTeam, String nbPoints) {
         this.nameTeam = nameTeam;
         this.nbPoints = nbPoints;
-
     }
 
-    public String getNameLeague() {
-        return nameLeague;
-    }
-
-    public void setNameLeague(String nameLeague) {
-        this.nameLeague = nameLeague;
-    }
 
     public String getNameTeam() {
         return nameTeam;
@@ -42,4 +37,14 @@ public class League {
     public void setNbPoints(String nbPoints) {
         this.nbPoints = nbPoints;
     }
+
+
+    public Image getLogoteam() {
+        return logoteam;
+    }
+
+    public void setLogoteam(Image logoteam) {
+        this.logoteam = logoteam;
+    }
+
 }

@@ -12,6 +12,8 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="noMatchesFound">No matches found</string>
+    <string name="nameTeamDefault">nameTeam</string>
+    <string name="nbPointsDefault">0</string>
 
     <string-array name="leagueSelectorArray">
         <item>Ligue 1 Conforama</item>

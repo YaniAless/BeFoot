@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
@@ -7,70 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".MatchActivity">
 
-    <TextView
-        android:id="@+id/leaguetitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/title_leagues"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
-
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="0dp"
-        android:background="?android:attr/windowBackground"
-        app:menu="@menu/navigation" />
-
-    <TextView
-        android:id="@+id/team"
+    <ListView
+        android:id="@+id/ranking"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="85dp" />
+        >
 
-    <Button
-        android:id="@+id/buttonSA"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SA" />
+    </ListView>
 
-    <Button
-        android:id="@+id/buttonLIGA"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/buttonSA"
-        android:layout_marginBottom="-534dp"
-        android:text="LIGA" />
 
-    <Button
-        android:id="@+id/buttonBL"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/buttonSA"
-        android:layout_marginBottom="-435dp"
-        android:text="BL" />
-
-    <Button
-        android:id="@+id/buttonPL"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/buttonSA"
-        android:layout_marginBottom="-482dp"
-        android:text="PL" />
-
-    <Button
-        android:id="@+id/buttonL1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/buttonSA"
-        android:layout_marginBottom="-581dp"
-        android:text="L1" />
-
-</RelativeLayout>
+</LinearLayout>
