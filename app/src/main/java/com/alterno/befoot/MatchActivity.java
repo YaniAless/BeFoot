@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
@@ -38,7 +40,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-public class MatchActivity extends AppCompatActivity {
+public class MatchActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private ListView listMatches;
     private TextView matchDate;
@@ -78,10 +80,16 @@ public class MatchActivity extends AppCompatActivity {
 
         leagueSelector = (Spinner) findViewById(R.id.leagueSelector);
 
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.leagueSelectorArray, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        leagueSelector.setAdapter(adapter);
+
+        leagueSelector.setOnItemSelectedListener(this);
+
         listMatches = (ListView) findViewById(R.id.listMatches);
-
-        GetMatchOfTheDay();
-
     }
 
     private String BuildDateForApi(){
@@ -113,20 +121,17 @@ public class MatchActivity extends AppCompatActivity {
         }
     }
 
-    private void GetMatchOfTheDay(){
+    private void GetMatchOfTheDay(String leagueId){
 
         RequestQueue queue = Volley.newRequestQueue(this);
-
-        String selectedLeague = getResources().getStringArray(R.array.leagueSelectorArray)[leagueSelector.getSelectedItemPosition()];
-        Log.i("LEAGUE",selectedLeague);
+        //String selectedLeague = getResources().getStringArray(R.array.leagueSelectorArray)[leagueSelector.getSelectedItemPosition()];
 
         String myDate = BuildDateForApi();
-
         String baseurl = "http://api.football-data.org/v2/competitions/";
 
         StringBuilder sbUrl = new StringBuilder();
         sbUrl.append(baseurl);
-        sbUrl.append(selectedLeague);
+        sbUrl.append(leagueId);
         sbUrl.append("/matches?");
         sbUrl.append("dateFrom=" + myDate);
         sbUrl.append("&dateTo=" + myDate);
@@ -138,8 +143,6 @@ public class MatchActivity extends AppCompatActivity {
                     List<Match> matchesList = new ArrayList<>();
 
                     JSONArray arrMatches = response.getJSONArray("matches");
-                    //String league = response.getString("name");
-                    //Log.i("TESTS","Response : " + response.toString());
 
                     for (int i = 0; i < arrMatches.length();i++){
                         JSONObject match = arrMatches.getJSONObject(i);
@@ -189,4 +192,40 @@ public class MatchActivity extends AppCompatActivity {
         queue.add(matchesReq);
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        String pos = String.valueOf(parent.getItemIdAtPosition(position));
+        String leagueName = "FL1";
+
+        switch (pos){
+            case "0":
+                leagueName = "FL1";
+                GetMatchOfTheDay(leagueName);
+
+                break;
+            case "1":
+                leagueName = "PL";
+                GetMatchOfTheDay(leagueName);
+                break;
+            case "2":
+                leagueName = "PD";
+                GetMatchOfTheDay(leagueName);
+                break;
+            case "3":
+                leagueName = "BL1";
+                GetMatchOfTheDay(leagueName);
+                break;
+            case "4":
+                leagueName = "SA";
+                GetMatchOfTheDay(leagueName);
+                break;
+
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }
