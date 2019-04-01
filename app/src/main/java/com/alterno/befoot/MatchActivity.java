@@ -88,7 +88,6 @@ public class MatchActivity extends AppCompatActivity implements AdapterView.OnIt
         leagueSelector.setAdapter(adapter);
 
         leagueSelector.setOnItemSelectedListener(this);
-
         listMatches = (ListView) findViewById(R.id.listMatches);
     }
 
