@@ -24,7 +24,9 @@
         android:layout_height="36dp"
         android:layout_below="@+id/matchesDate"
         android:layout_marginTop="9dp"
-        android:spinnerMode="dropdown" />
+        android:spinnerMode="dropdown"
+        android:entries="@array/leagueSelectorArray"
+        />
 
     <TextView
         android:id="@+id/noMatchesMsg"

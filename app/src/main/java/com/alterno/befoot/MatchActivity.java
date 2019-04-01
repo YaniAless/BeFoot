@@ -75,11 +75,9 @@ public class MatchActivity extends AppCompatActivity {
         matchDate.setText(GetCurrentDate());
 
 
-        /* Start code for league selector
+        // Start code for league selector
         leagueSelector = (Spinner) findViewById(R.id.leagueSelector);
-        SpinnerAdapter SpinnerAdapter =
 
-        leagueSelector.set*/
 
         listMatches = (ListView) findViewById(R.id.listMatches);
     }
