@@ -28,10 +28,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -65,26 +68,32 @@ public class MatchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        GetMatchOfTheDay();
         setContentView(R.layout.activity_main);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         matchDate = (TextView) findViewById(R.id.matchesDate);
-        matchDate.setText(GetCurrentDate());
+        matchDate.setText(DisplayLocalDate());
 
-
-        // Start code for league selector
         leagueSelector = (Spinner) findViewById(R.id.leagueSelector);
 
-
         listMatches = (ListView) findViewById(R.id.listMatches);
+
+        GetMatchOfTheDay();
+
     }
 
-    private String GetCurrentDate(){
+    private String BuildDateForApi(){
+        Date cDate = new Date();
+        String fDate = new SimpleDateFormat("yyyy-MM-dd").format(cDate);
+
+        return fDate;
+    }
+
+    private String DisplayLocalDate(){
         Calendar calendar = Calendar.getInstance();
-        String currentDate = DateFormat.getDateInstance(DateFormat.SHORT).format(calendar.getTime());
+        String currentDate = DateFormat.getDateInstance(DateFormat.MEDIUM).format(calendar.getTime());
 
         return currentDate;
     }
@@ -104,22 +113,23 @@ public class MatchActivity extends AppCompatActivity {
         }
     }
 
-    private void BuildDateForApi(){
-
-    }
-
     private void GetMatchOfTheDay(){
 
         RequestQueue queue = Volley.newRequestQueue(this);
 
-        String url = "http://api.football-data.org/v2/competitions/FL1/matches?";
-        String myDate = "2019-03-31";
+        String selectedLeague = getResources().getStringArray(R.array.leagueSelectorArray)[leagueSelector.getSelectedItemPosition()];
+        Log.i("LEAGUE",selectedLeague);
+
+        String myDate = BuildDateForApi();
+
+        String baseurl = "http://api.football-data.org/v2/competitions/";
+
         StringBuilder sbUrl = new StringBuilder();
-        sbUrl.append(url);
+        sbUrl.append(baseurl);
+        sbUrl.append(selectedLeague);
+        sbUrl.append("/matches?");
         sbUrl.append("dateFrom=" + myDate);
         sbUrl.append("&dateTo=" + myDate);
-
-        //Log.i("TESTS","sbURL " + sbUrl.toString());
 
         JsonObjectRequest matchesReq = new JsonObjectRequest(Request.Method.GET, sbUrl.toString(), null, new Response.Listener<JSONObject>() {
             @Override

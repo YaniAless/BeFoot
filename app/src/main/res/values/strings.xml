@@ -16,9 +16,10 @@
     <string name="nbPointsDefault">0</string>
 
     <string-array name="leagueSelectorArray">
-        <item>Ligue 1 Conforama</item>
-        <item>Premier league</item>
-        <item>Liga</item>
-        <item>Serie A</item>
+        <item name="FL1">Ligue 1 Conforama</item>
+        <item name="PL">Premiere League</item>
+        <item name="PD">LIGA</item>
+        <item name="BL1">1. Bundesliga</item>
+        <item name="SA">Serie A</item>
     </string-array>
 </resources>
