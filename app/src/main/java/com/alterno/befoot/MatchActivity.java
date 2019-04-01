@@ -113,9 +113,10 @@ public class MatchActivity extends AppCompatActivity implements AdapterView.OnIt
                 noMatchesMsg.setVisibility(View.INVISIBLE);
             MatchAdapter adapter = new MatchAdapter(MatchActivity.this,matchesList);
             listMatches.setAdapter(adapter);
-            Log.i("TESTS", "Matches list : " + matchesList.size());
         }
         else{
+            matchesList.clear();
+            listMatches.setAdapter(null);
             noMatchesMsg.setVisibility(View.VISIBLE);
             noMatchesMsg.setText(R.string.noMatchesFound);
         }
