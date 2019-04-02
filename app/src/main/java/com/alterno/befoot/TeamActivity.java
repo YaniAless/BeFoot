@@ -22,7 +22,7 @@ public class TeamActivity extends AppCompatActivity {
                     startActivity(new Intent(TeamActivity.this,LeagueActivity.class));
                     return true;
                 case R.id.navigation_teams:
-                    startActivity(new Intent(TeamActivity.this,TeamActivity.class));
+
                     return true;
             }
             return false;
@@ -33,5 +33,9 @@ public class TeamActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_team);
+
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setSelectedItemId(R.id.navigation_teams);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 }

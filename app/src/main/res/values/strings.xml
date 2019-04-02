@@ -19,7 +19,7 @@
         <item name="FL1">Ligue 1 Conforama</item>
         <item name="PL">Premiere League</item>
         <item name="PD">LIGA</item>
-        <item name="BL1">1. Bundesliga</item>
+        <item name="BL1">Bundesliga</item>
         <item name="SA">Serie A</item>
     </string-array>
 </resources>

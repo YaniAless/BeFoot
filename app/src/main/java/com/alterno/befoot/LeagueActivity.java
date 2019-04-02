@@ -41,13 +41,14 @@ public class LeagueActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
-                case R.id.navigation_leagues:
-                    return true;
                 case R.id.navigation_matches:
                     startActivity(new Intent(LeagueActivity.this, MatchActivity.class));
                     return true;
+                case R.id.navigation_leagues:
+
+                    return true;
                 case R.id.navigation_teams:
-                    //mTextMessage.setText(R.string.title_teams);
+                    startActivity(new Intent(LeagueActivity.this,TeamActivity.class));
                     return true;
             }
             return false;
@@ -61,8 +62,9 @@ public class LeagueActivity extends AppCompatActivity {
         GetRanking("FL1"); // à faire : choisir son championnat
         setContentView(R.layout.activity_league);
 
-        //BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        //navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setSelectedItemId(R.id.navigation_leagues);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         rankingView = findViewById(R.id.ranking);
         logoTeam= findViewById(R.id.logoTeam);
