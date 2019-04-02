@@ -106,15 +106,11 @@ public class LeagueActivity extends AppCompatActivity {
 
                         String logoTeam = team1.getString("crestUrl");
 
-
-
                         League league = new League(nameTeam, points2);
                         ranking.add(league);
 
                     }
                     DisplayRanking(ranking);
-
-
                 }
                 catch (JSONException e){
                     e.printStackTrace();

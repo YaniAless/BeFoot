@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
@@ -46,6 +47,8 @@ public class MatchActivity extends AppCompatActivity implements AdapterView.OnIt
     private TextView matchDate;
     private TextView noMatchesMsg;
     private Spinner leagueSelector;
+    private ImageButton btn_prev;
+    private ImageButton btn_next;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -75,6 +78,7 @@ public class MatchActivity extends AppCompatActivity implements AdapterView.OnIt
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+
         matchDate = (TextView) findViewById(R.id.matchesDate);
         matchDate.setText(DisplayLocalDate());
 
@@ -89,7 +93,52 @@ public class MatchActivity extends AppCompatActivity implements AdapterView.OnIt
 
         leagueSelector.setOnItemSelectedListener(this);
         listMatches = (ListView) findViewById(R.id.listMatches);
+
+
+        btn_prev = (ImageButton) findViewById(R.id.btn_prev);
+        btn_prev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("CLICK","Prev date clicked !");
+                BuildNewDate('p');
+            }
+        });
+
+        btn_next = (ImageButton) findViewById(R.id.btn_next);
+        btn_next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("CLICK","Next date clicked !");
+                BuildNewDate('n');
+            }
+        });
     }
+
+    private void BuildNewDate(Character action){
+        Date dt = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(dt);
+
+        String fDate = "";
+
+        switch (action){
+            case 'p':
+                c.add(Calendar.DATE, -1);
+                dt = c.getTime();
+                fDate = new SimpleDateFormat("yyyy-MM-dd").format(dt);
+                Log.i("DATE", fDate);
+
+                break;
+            case 'n':
+                c.add(Calendar.DATE, 1);
+                dt = c.getTime();
+                fDate = new SimpleDateFormat("yyyy-MM-dd").format(dt);
+                Log.i("DATE", fDate);
+
+                break;
+        }
+    }
+
 
     private String BuildDateForApi(){
         Date cDate = new Date();
@@ -121,12 +170,10 @@ public class MatchActivity extends AppCompatActivity implements AdapterView.OnIt
         }
     }
 
-    private void GetMatchOfTheDay(String leagueId){
+    private void GetMatchOfTheDay(String leagueId, String myDate){
 
         RequestQueue queue = Volley.newRequestQueue(this);
-        //String selectedLeague = getResources().getStringArray(R.array.leagueSelectorArray)[leagueSelector.getSelectedItemPosition()];
 
-        String myDate = BuildDateForApi();
         String baseurl = "http://api.football-data.org/v2/competitions/";
 
         StringBuilder sbUrl = new StringBuilder();
@@ -153,17 +200,13 @@ public class MatchActivity extends AppCompatActivity implements AdapterView.OnIt
                         String awayTeamScore = match.getJSONObject("score").getJSONObject("fullTime").getString("awayTeam");
 
                         if(homeTeamScore == "null" || awayTeamScore == "null"){
-                            homeTeamScore = "0";
-                            awayTeamScore = "0";
+                            homeTeamScore = "-";
+                            awayTeamScore = "-";
                         }
 
                         String matchStatus = match.getString("status");
                         String matchDay = match.getString("matchday");
                         String matchDate = match.getString("utcDate");
-
-                        //League matchLeague = league;
-                        //ImageView homeTeamImg = match.getString();
-                        //ImageView awayTeamImg = match.getString();
 
                         Match matchOfTheDay = new Match(homeTeam,awayTeam,homeTeamScore,awayTeamScore,matchStatus,matchDay,matchDate);
                         matchesList.add(matchOfTheDay);
@@ -198,27 +241,29 @@ public class MatchActivity extends AppCompatActivity implements AdapterView.OnIt
         String pos = String.valueOf(parent.getItemIdAtPosition(position));
         String leagueName = "FL1";
 
+        // Here we check what the is ID of the value in the Spinner which indicates what league is selected
         switch (pos){
             case "0":
                 leagueName = "FL1";
-                GetMatchOfTheDay(leagueName);
+                GetMatchOfTheDay(leagueName, BuildDateForApi());
 
                 break;
             case "1":
                 leagueName = "PL";
-                GetMatchOfTheDay(leagueName);
+                GetMatchOfTheDay(leagueName, BuildDateForApi());
                 break;
             case "2":
                 leagueName = "PD";
-                GetMatchOfTheDay(leagueName);
+                GetMatchOfTheDay(leagueName, BuildDateForApi());
                 break;
             case "3":
                 leagueName = "BL1";
-                GetMatchOfTheDay(leagueName);
+
+                GetMatchOfTheDay(leagueName, BuildDateForApi());
                 break;
             case "4":
                 leagueName = "SA";
-                GetMatchOfTheDay(leagueName);
+                GetMatchOfTheDay(leagueName, BuildDateForApi());
                 break;
 
         }
@@ -228,4 +273,6 @@ public class MatchActivity extends AppCompatActivity implements AdapterView.OnIt
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+
 }
