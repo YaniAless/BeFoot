@@ -79,8 +79,8 @@ public class LeagueActivity extends AppCompatActivity {
 
     private void GetRanking(String idLeague){
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://api.football-data.org/v2/competitions/"+ idLeague +"/standings";
 
+        String url = String.format("https://api.football-data.org/v2/competitions/%s/standings",idLeague);
 
         JsonObjectRequest matchesReq = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override

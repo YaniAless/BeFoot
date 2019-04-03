@@ -78,11 +78,10 @@ public class MatchActivity extends AppCompatActivity implements AdapterView.OnIt
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-
+        listMatches = findViewById(R.id.listMatches);
+        leagueSelector = (Spinner) findViewById(R.id.leagueSelector);
         matchDate = (TextView) findViewById(R.id.matchesDate);
         matchDate.setText(DisplayLocalDate());
-
-        leagueSelector = (Spinner) findViewById(R.id.leagueSelector);
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.leagueSelectorArray, android.R.layout.simple_spinner_item);
@@ -90,10 +89,7 @@ public class MatchActivity extends AppCompatActivity implements AdapterView.OnIt
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         leagueSelector.setAdapter(adapter);
-
         leagueSelector.setOnItemSelectedListener(this);
-        listMatches = (ListView) findViewById(R.id.listMatches);
-
 
         btn_prev = (ImageButton) findViewById(R.id.btn_prev);
         btn_prev.setOnClickListener(new View.OnClickListener() {
@@ -140,25 +136,12 @@ public class MatchActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
 
-    private String BuildDateForApi(){
-        Date cDate = new Date();
-        String fDate = new SimpleDateFormat("yyyy-MM-dd").format(cDate);
-
-        return fDate;
-    }
-
-    private String DisplayLocalDate(){
-        Calendar calendar = Calendar.getInstance();
-        String currentDate = DateFormat.getDateInstance(DateFormat.MEDIUM).format(calendar.getTime());
-
-        return currentDate;
-    }
-
     private void DisplayMatchesOfTheDay(List<Match> matchesList){
         noMatchesMsg = (TextView) findViewById(R.id.noMatchesMsg);
         if(matchesList.size() > 0){
             if(noMatchesMsg.getVisibility() == View.VISIBLE)
                 noMatchesMsg.setVisibility(View.INVISIBLE);
+
             MatchAdapter adapter = new MatchAdapter(MatchActivity.this,matchesList);
             listMatches.setAdapter(adapter);
         }
@@ -166,24 +149,16 @@ public class MatchActivity extends AppCompatActivity implements AdapterView.OnIt
             matchesList.clear();
             listMatches.setAdapter(null);
             noMatchesMsg.setVisibility(View.VISIBLE);
-            noMatchesMsg.setText(R.string.noMatchesFound);
+            noMatchesMsg.setText(R.string.nomatch_msg);
         }
     }
 
     private void GetMatchOfTheDay(String leagueId, String myDate){
 
         RequestQueue queue = Volley.newRequestQueue(this);
+        String url = String.format("https://api.football-data.org/v2/competitions/%s/matches?dateFrom=%s&dateTo=%s",leagueId,myDate,myDate);
 
-        String baseurl = "http://api.football-data.org/v2/competitions/";
-
-        StringBuilder sbUrl = new StringBuilder();
-        sbUrl.append(baseurl);
-        sbUrl.append(leagueId);
-        sbUrl.append("/matches?");
-        sbUrl.append("dateFrom=" + myDate);
-        sbUrl.append("&dateTo=" + myDate);
-
-        JsonObjectRequest matchesReq = new JsonObjectRequest(Request.Method.GET, sbUrl.toString(), null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest matchesReq = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try{
@@ -214,7 +189,9 @@ public class MatchActivity extends AppCompatActivity implements AdapterView.OnIt
                     DisplayMatchesOfTheDay(matchesList);
                 }
                 catch (JSONException e){
+                    Log.i("API ERROR",e.getMessage());
                     e.printStackTrace();
+                    e.getCause();
                 }
             }
         }, new Response.ErrorListener() {
@@ -235,11 +212,25 @@ public class MatchActivity extends AppCompatActivity implements AdapterView.OnIt
         queue.add(matchesReq);
     }
 
+    private String BuildDateForApi(){
+        Date cDate = new Date();
+        String fDate = new SimpleDateFormat("yyyy-MM-dd").format(cDate);
+
+        return fDate;
+    }
+
+    private String DisplayLocalDate(){
+        Calendar calendar = Calendar.getInstance();
+        String currentDate = DateFormat.getDateInstance(DateFormat.MEDIUM).format(calendar.getTime());
+
+        return currentDate;
+    }
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         String pos = String.valueOf(parent.getItemIdAtPosition(position));
-        String leagueName = "FL1";
+        String leagueName = "";
 
         // Here we check what the is ID of the value in the Spinner which indicates what league is selected
         switch (pos){

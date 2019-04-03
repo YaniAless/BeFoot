@@ -11,9 +11,14 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-    <string name="noMatchesFound">No matches found</string>
+    <string name="nomatch_msg">No matches found</string>
+    <string name="matchscore_default">-</string>
+    <string name="hometeam_default">Home Team</string>
+    <string name="awayteam_default">Away Team</string>
     <string name="nameTeamDefault">nameTeam</string>
     <string name="nbPointsDefault">0</string>
+    <string name="btnprev_desc">previous date</string>
+    <string name="btnnext_desc">next date</string>
 
     <string-array name="leagueSelectorArray">
         <item name="FL1">Ligue 1 Conforama</item>
