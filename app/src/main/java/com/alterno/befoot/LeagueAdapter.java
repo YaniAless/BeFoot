@@ -28,6 +28,7 @@ public class LeagueAdapter extends ArrayAdapter<League> {
             viewHolder = new LeagueViewHolder();
             viewHolder.nameTeam = (TextView) convertView.findViewById(R.id.nameTeam);
             viewHolder.nbPoints = (TextView) convertView.findViewById(R.id.nbPoints);
+            viewHolder.placeTeam = (TextView) convertView.findViewById(R.id.placeTeam);
             convertView.setTag(viewHolder);
         }
 
@@ -35,6 +36,7 @@ public class LeagueAdapter extends ArrayAdapter<League> {
 
         viewHolder.nameTeam.setText(league.getNameTeam());
         viewHolder.nbPoints.setText(league.getNbPoints());
+        viewHolder.placeTeam.setText(league.getPlaceTeam());
 
 
         return convertView;
@@ -43,6 +45,7 @@ public class LeagueAdapter extends ArrayAdapter<League> {
     private class LeagueViewHolder{
         public TextView nameTeam;
         public TextView nbPoints;
+        public TextView placeTeam;
         public ImageView logoTeam;
     }
 }

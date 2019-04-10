@@ -8,6 +8,7 @@ public class League {
     private String nameTeam;
     private String nbPoints;
     private Image logoteam;
+    private String placeTeam;
 
     public League(String nameTeam, String nbPoints, Image logoteam) {
         this.nameTeam = nameTeam;
@@ -16,11 +17,19 @@ public class League {
 
     }
 
-    public League(String nameTeam, String nbPoints) {
+    public League(String nameTeam, String nbPoints, String placeTeam) {
         this.nameTeam = nameTeam;
         this.nbPoints = nbPoints;
+        this.placeTeam = placeTeam;
     }
 
+    public String getPlaceTeam() {
+        return placeTeam;
+    }
+
+    public void setPlaceTeam(String placeTeam) {
+        this.placeTeam = placeTeam;
+    }
 
     public String getNameTeam() {
         return nameTeam;

@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -39,6 +40,7 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
     private ImageView logoTeam;
     private Spinner leagueSelector2;
     private Button goalScorersButton;
+    private TextView placeTeam;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -73,6 +75,7 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         leagueSelector2 = findViewById(R.id.leagueSelector2);
         goalScorersButton = findViewById(R.id.buttonGoalScorers);
+        placeTeam = findViewById(R.id.placeTeam);
 
         rankingView = findViewById(R.id.ranking);
         logoTeam= findViewById(R.id.logoTeam);
@@ -103,7 +106,7 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
 
 
 
-    private void GetRanking(String idLeague){
+    private void GetRanking(final String idLeague){
         RequestQueue queue = Volley.newRequestQueue(this);
 
         String url = String.format("https://api.football-data.org/v2/competitions/%s/standings",idLeague);
@@ -120,6 +123,26 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
 
                     JSONArray jsonArray = response.getJSONArray("standings"); // on se positionne dans l'array standings (classement)
 
+                    if(idLeague == "BL1")
+                    {
+                        for (int i = 0; i < 18; i++) {
+                            JSONObject standings = jsonArray.getJSONObject(0); //on se positionne au 1er objet (classement général)
+                            JSONArray table = standings.getJSONArray("table");
+                            JSONObject team = table.getJSONObject(i);
+                            JSONObject team1 = team.getJSONObject("team");
+                            String nameTeam = team1.getString("name");
+                            String points = team.getString("points");
+                            String points2 = points + " pts"; // A REFAIRE
+                            String placeTeam = String.valueOf(i + 1);
+
+                            String logoTeam = team1.getString("crestUrl");
+
+                            League league = new League(nameTeam, points2, placeTeam);
+                            ranking.add(league);
+
+                        }
+                    }
+                    else
 
                     for (int i = 0; i < 20; i++) {
                         JSONObject standings = jsonArray.getJSONObject(0); //on se positionne au 1er objet (classement général)
@@ -129,10 +152,11 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
                         String nameTeam = team1.getString("name");
                         String points = team.getString("points");
                         String points2 = points + " pts"; // A REFAIRE
+                        String placeTeam = String.valueOf(i + 1);
 
                         String logoTeam = team1.getString("crestUrl");
 
-                        League league = new League(nameTeam, points2);
+                        League league = new League(nameTeam, points2, placeTeam);
                         ranking.add(league);
 
                     }
