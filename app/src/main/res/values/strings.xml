@@ -19,12 +19,14 @@
     <string name="nbPointsDefault">0</string>
     <string name="btnprev_desc">previous date</string>
     <string name="btnnext_desc">next date</string>
+    <string name="nameScorerDefault">nameScorer</string>
 
     <string-array name="leagueSelectorArray">
-        <item name="FL1">Ligue 1 Conforama</item>
-        <item name="PL">Premiere League</item>
+        <item name="FL1">Ligue 1</item>
+        <item name="PL">Premier League</item>
         <item name="PD">LIGA</item>
         <item name="BL1">Bundesliga</item>
         <item name="SA">Serie A</item>
+        <item name="CL">Champions League</item>
     </string-array>
 </resources>

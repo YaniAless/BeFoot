@@ -257,6 +257,11 @@ public class MatchActivity extends AppCompatActivity implements AdapterView.OnIt
                 GetMatchOfTheDay(leagueName, BuildDateForApi());
                 break;
 
+            case "5":
+                leagueName= "CL";
+                GetMatchOfTheDay(leagueName, BuildDateForApi());
+                break;
+
         }
     }
 

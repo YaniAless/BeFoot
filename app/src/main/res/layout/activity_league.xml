@@ -7,10 +7,31 @@
     android:layout_height="match_parent"
     tools:context=".LeagueActivity">
 
+    <TextView
+        android:id="@+id/titleLeagues"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/title_leagues"
+        android:textAlignment="center"
+        android:textSize="18sp"
+ />
+
     <ListView
         android:id="@+id/ranking"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/leagueSelector2"
+        />
+
+    <Spinner
+        android:id="@+id/leagueSelector2"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_below="@+id/titleLeagues"
+        android:layout_marginTop="9dp"
+        android:entries="@array/leagueSelectorArray"
+        android:spinnerMode="dropdown"
+        android:textAlignment="center" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
@@ -22,5 +43,12 @@
         android:layout_marginBottom="0dp"
         android:background="?android:attr/windowBackground"
         app:menu="@menu/navigation" />
+
+    <Button
+        android:id="@+id/buttonGoalScorers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Buteurs" />
+
 
 </RelativeLayout>
