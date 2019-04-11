@@ -7,20 +7,15 @@ public class League {
 
     private String nameTeam;
     private String nbPoints;
-    private Image logoteam;
+    private String logoTeam;
     private String placeTeam;
 
-    public League(String nameTeam, String nbPoints, Image logoteam) {
-        this.nameTeam = nameTeam;
-        this.nbPoints = nbPoints;
-        this.logoteam = logoteam;
 
-    }
-
-    public League(String nameTeam, String nbPoints, String placeTeam) {
+    public League(String nameTeam, String nbPoints, String placeTeam, String logoTeam) {
         this.nameTeam = nameTeam;
         this.nbPoints = nbPoints;
         this.placeTeam = placeTeam;
+        this.logoTeam = logoTeam;
     }
 
     public String getPlaceTeam() {
@@ -48,12 +43,12 @@ public class League {
     }
 
 
-    public Image getLogoteam() {
-        return logoteam;
+    public String getLogoTeam() {
+        return logoTeam;
     }
 
-    public void setLogoteam(Image logoteam) {
-        this.logoteam = logoteam;
+    public void setLogoTeam(String logoTeam) {
+        this.logoTeam = logoTeam;
     }
 
 }

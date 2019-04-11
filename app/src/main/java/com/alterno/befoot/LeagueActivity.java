@@ -41,6 +41,7 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
     private Spinner leagueSelector2;
     private Button goalScorersButton;
     private TextView placeTeam;
+    private TextView titleLeague;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -76,6 +77,7 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
         leagueSelector2 = findViewById(R.id.leagueSelector2);
         goalScorersButton = findViewById(R.id.buttonGoalScorers);
         placeTeam = findViewById(R.id.placeTeam);
+        titleLeague = findViewById(R.id.titleLeagues);
 
         rankingView = findViewById(R.id.ranking);
         logoTeam= findViewById(R.id.logoTeam);
@@ -137,7 +139,7 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
 
                             String logoTeam = team1.getString("crestUrl");
 
-                            League league = new League(nameTeam, points2, placeTeam);
+                            League league = new League(nameTeam, points2, placeTeam, logoTeam);
                             ranking.add(league);
 
                         }
@@ -156,7 +158,7 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
 
                         String logoTeam = team1.getString("crestUrl");
 
-                        League league = new League(nameTeam, points2, placeTeam);
+                        League league = new League(nameTeam, points2, placeTeam, logoTeam);
                         ranking.add(league);
 
                     }

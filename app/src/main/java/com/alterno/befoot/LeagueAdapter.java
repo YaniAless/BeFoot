@@ -9,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class LeagueAdapter extends ArrayAdapter<League> {
@@ -29,14 +31,19 @@ public class LeagueAdapter extends ArrayAdapter<League> {
             viewHolder.nameTeam = (TextView) convertView.findViewById(R.id.nameTeam);
             viewHolder.nbPoints = (TextView) convertView.findViewById(R.id.nbPoints);
             viewHolder.placeTeam = (TextView) convertView.findViewById(R.id.placeTeam);
+            viewHolder.logoTeam = convertView.findViewById(R.id.logoTeam);
             convertView.setTag(viewHolder);
         }
 
         League league = getItem(position);
 
+        String url = league.getLogoTeam();
+        //url.replace("http", "https");
+        Picasso.get().load(url).resize(120,120).into(viewHolder.logoTeam);
         viewHolder.nameTeam.setText(league.getNameTeam());
         viewHolder.nbPoints.setText(league.getNbPoints());
         viewHolder.placeTeam.setText(league.getPlaceTeam());
+
 
 
         return convertView;
