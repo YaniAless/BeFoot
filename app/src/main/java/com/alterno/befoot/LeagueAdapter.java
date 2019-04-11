@@ -37,9 +37,7 @@ public class LeagueAdapter extends ArrayAdapter<League> {
 
         League league = getItem(position);
 
-        String url = league.getLogoTeam();
-        //url.replace("http", "https");
-        Picasso.get().load(url).resize(120,120).into(viewHolder.logoTeam);
+        Picasso.get().load(league.getLogoTeam()).resize(120,120).into(viewHolder.logoTeam);
         viewHolder.nameTeam.setText(league.getNameTeam());
         viewHolder.nbPoints.setText(league.getNbPoints());
         viewHolder.placeTeam.setText(league.getPlaceTeam());
