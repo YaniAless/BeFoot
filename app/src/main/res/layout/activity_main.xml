@@ -20,8 +20,8 @@
         android:id="@+id/btn_prev"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:contentDescription="@string/btnprev_desc"
         android:backgroundTint="@android:color/transparent"
+        android:contentDescription="@string/btnprev_desc"
         app:srcCompat="@drawable/baseline_arrow_back_black_18dp" />
 
     <ImageButton
@@ -29,9 +29,9 @@
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_alignParentEnd="true"
-        android:contentDescription="@string/btnnext_desc"
         android:layout_marginEnd="0dp"
         android:backgroundTint="@android:color/transparent"
+        android:contentDescription="@string/btnnext_desc"
         app:srcCompat="@drawable/baseline_arrow_forward_black_18dp" />
 
     <TextView
@@ -39,9 +39,9 @@
         android:layout_width="315dp"
         android:layout_height="40dp"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
+        android:layout_marginStart="-2dp"
         android:layout_marginTop="0dp"
-        android:layout_marginEnd="0dp"
+        android:layout_marginEnd="2dp"
         android:layout_toStartOf="@+id/btn_next"
         android:layout_toEndOf="@+id/btn_prev"
         android:text="@string/title_matches"
@@ -58,14 +58,14 @@
         android:layout_marginTop="9dp"
         android:entries="@array/leagueSelectorArray"
         android:spinnerMode="dropdown"
-        android:textAlignment="center" />
+        android:textAlignment="viewStart" />
 
     <TextView
         android:id="@+id/noMatchesMsg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/leagueSelector"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="5dp"
         android:text="@string/nomatch_msg"
         android:textAlignment="center"
         android:textSize="24sp"
@@ -82,8 +82,6 @@
         android:layout_marginBottom="0dp"
         android:background="?android:attr/windowBackground"
         app:menu="@menu/navigation" />
-
-
 
 
 </RelativeLayout>

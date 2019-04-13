@@ -1,7 +1,6 @@
 package com.alterno.befoot;
 
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -9,13 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -37,9 +34,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
 public class MatchActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -49,6 +44,7 @@ public class MatchActivity extends AppCompatActivity implements AdapterView.OnIt
     private Spinner leagueSelector;
     private ImageButton btn_prev;
     private ImageButton btn_next;
+    private Date today = new Date();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -81,7 +77,7 @@ public class MatchActivity extends AppCompatActivity implements AdapterView.OnIt
         listMatches = findViewById(R.id.listMatches);
         leagueSelector = (Spinner) findViewById(R.id.leagueSelector);
         matchDate = (TextView) findViewById(R.id.matchesDate);
-        matchDate.setText(DisplayLocalDate());
+        matchDate.setText(GetLocalDate());
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.leagueSelectorArray, android.R.layout.simple_spinner_item);
@@ -111,25 +107,43 @@ public class MatchActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     private void BuildNewDate(Character action){
-        Date dt = new Date();
-        Calendar c = Calendar.getInstance();
-        c.setTime(dt);
+        //Date dt = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(today);
 
-        String fDate = "";
+        String fDate = null;
+        String apiDate = null;
+        String leagueId = null;
 
         switch (action){
             case 'p':
-                c.add(Calendar.DATE, -1);
-                dt = c.getTime();
-                fDate = new SimpleDateFormat("yyyy-MM-dd").format(dt);
-                Log.i("DATE", fDate);
+                // We subtract one day to the current displayed date
+                calendar.add(Calendar.DATE, -1);
+                today = calendar.getTime();
+                fDate = new SimpleDateFormat("dd MMM YYYY").format(today);
+                matchDate.setText(fDate);
+
+                apiDate = new SimpleDateFormat("yyyy-MM-dd").format(today);
+                leagueId = GetLeagueIdWithPos(String.valueOf(leagueSelector.getSelectedItemId()));
+                GetMatchOfTheDayByLeague(leagueId,apiDate);
+
+                //Log.i("DATE", fDate);
+                //Log.i("DATE", leagueId);
 
                 break;
             case 'n':
-                c.add(Calendar.DATE, 1);
-                dt = c.getTime();
-                fDate = new SimpleDateFormat("yyyy-MM-dd").format(dt);
-                Log.i("DATE", fDate);
+                // We add one day to the current displayed date
+                calendar.add(Calendar.DATE, 1);
+                today = calendar.getTime();
+                fDate = new SimpleDateFormat("dd MMM YYYY").format(today);
+                matchDate.setText(fDate);
+
+                apiDate = new SimpleDateFormat("yyyy-MM-dd").format(today);
+                leagueId = GetLeagueIdWithPos(String.valueOf(leagueSelector.getSelectedItemId()));
+                GetMatchOfTheDayByLeague(leagueId,apiDate);
+
+                //Log.i("DATE", fDate);
+                //Log.i("DATE", leagueId);
 
                 break;
         }
@@ -153,7 +167,7 @@ public class MatchActivity extends AppCompatActivity implements AdapterView.OnIt
         }
     }
 
-    private void GetMatchOfTheDay(String leagueId, String myDate){
+    private void GetMatchOfTheDayByLeague(String leagueId, String myDate){
 
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = String.format("https://api.football-data.org/v2/competitions/%s/matches?dateFrom=%s&dateTo=%s",leagueId,myDate,myDate);
@@ -219,47 +233,65 @@ public class MatchActivity extends AppCompatActivity implements AdapterView.OnIt
         return fDate;
     }
 
-    private String DisplayLocalDate(){
-        Calendar calendar = Calendar.getInstance();
-        String currentDate = DateFormat.getDateInstance(DateFormat.MEDIUM).format(calendar.getTime());
+    private String GetLocalDate(){
+        //Calendar calendar = Calendar.getInstance();
+        String currentDate = DateFormat.getDateInstance(DateFormat.MEDIUM).format(today);
 
         return currentDate;
+    }
+
+    private String GetLeagueIdWithPos(String pos){
+        switch (pos){
+            case "0":
+                return "FL1";
+            case "1":
+                return "PL";
+            case "2":
+                return "PD";
+            case "3":
+                return "BL1";
+            case "4":
+                return "SA";
+            case "5":
+                return "CL";
+        }
+        return "Can't get league ID";
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         String pos = String.valueOf(parent.getItemIdAtPosition(position));
-        String leagueName = "";
+        String leagueName = null;
 
         // Here we check what the is ID of the value in the Spinner which indicates what league is selected
         switch (pos){
             case "0":
                 leagueName = "FL1";
-                GetMatchOfTheDay(leagueName, BuildDateForApi());
+                GetMatchOfTheDayByLeague(leagueName, BuildDateForApi());
 
                 break;
             case "1":
                 leagueName = "PL";
-                GetMatchOfTheDay(leagueName, BuildDateForApi());
+                GetMatchOfTheDayByLeague(leagueName, BuildDateForApi());
                 break;
             case "2":
                 leagueName = "PD";
-                GetMatchOfTheDay(leagueName, BuildDateForApi());
+                GetMatchOfTheDayByLeague(leagueName, BuildDateForApi());
                 break;
             case "3":
                 leagueName = "BL1";
 
-                GetMatchOfTheDay(leagueName, BuildDateForApi());
+                GetMatchOfTheDayByLeague(leagueName, BuildDateForApi());
                 break;
             case "4":
                 leagueName = "SA";
-                GetMatchOfTheDay(leagueName, BuildDateForApi());
+                GetMatchOfTheDayByLeague(leagueName, BuildDateForApi());
                 break;
 
             case "5":
                 leagueName= "CL";
-                GetMatchOfTheDay(leagueName, BuildDateForApi());
+                GetMatchOfTheDayByLeague(leagueName, BuildDateForApi());
                 break;
 
         }
