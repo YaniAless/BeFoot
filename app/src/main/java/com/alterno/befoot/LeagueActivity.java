@@ -1,9 +1,6 @@
 package com.alterno.befoot;
 
 import android.content.Intent;
-import androidx.annotation.NonNull;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -17,6 +14,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -24,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,7 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class LeagueActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class LeagueActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private ListView rankingView;
     private ListView rankingView2;
     private ImageView logoTeam;
@@ -57,7 +58,7 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
 
                     return true;
                 case R.id.navigation_teams:
-                    startActivity(new Intent(LeagueActivity.this,TeamActivity.class));
+                    startActivity(new Intent(LeagueActivity.this, TeamActivity.class));
                     return true;
             }
             return false;
@@ -65,8 +66,7 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
     };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //GetRanking("FL1"); // à faire : choisir son championnat
         setContentView(R.layout.activity_league);
@@ -80,7 +80,7 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
         titleLeague = findViewById(R.id.titleLeagues);
 
         rankingView = findViewById(R.id.ranking);
-        logoTeam= findViewById(R.id.logoTeam);
+        logoTeam = findViewById(R.id.logoTeam);
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.leagueSelectorArray, android.R.layout.simple_spinner_item);
@@ -99,20 +99,19 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
     }
 
 
-        private void DisplayGoalScorersRanking(List<Player> goalScorersRanking)
-    {
-        PlayerAdapter adapter = new PlayerAdapter(LeagueActivity.this,goalScorersRanking);
+    private void DisplayGoalScorersRanking(List<Player> goalScorersRanking) {
+        PlayerAdapter adapter = new PlayerAdapter(LeagueActivity.this, goalScorersRanking);
         rankingView.setAdapter(adapter);
         Log.i("TESTS", "Matches list : " + goalScorersRanking.size());
     }
 
 
 
-    private void GetRanking(final String idLeague){
+    /*private void GetRanking(final String idLeague){
         RequestQueue queue = Volley.newRequestQueue(this);
 
         //String url = String.format("https://api.football-data.org/v2/competitions/%s/standings",idLeague);
-        String url = "https://api-football-v1.p.rapidapi.com/v2/leagueTable/4";
+        String url = "https://api-football-v1.p.rapidapi.com/v2/leagueTable/525";
 
         JsonObjectRequest matchesReq = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -185,18 +184,17 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
             }
         };
         queue.add(matchesReq);
-    }
+    }*/
 
-    private void GetRanking(){
+    private void GetRanking(final int idLeague) {
         RequestQueue queue = Volley.newRequestQueue(this);
 
-        //String url = String.format("https://api.football-data.org/v2/competitions/%s/standings",idLeague);
-        String url = "https://api-football-v1.p.rapidapi.com/v2/leagueTable/4";
+        String url = String.format("https://api-football-v1.p.rapidapi.com/v2/leagueTable/%s", idLeague);
 
         JsonObjectRequest matchesReq = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                try{
+                try {
                     List<League> ranking = new ArrayList<>();
 
                     //JSONObject jsonObject = response.getJSONObject("competition"); // on se positionne dans l'objet competition
@@ -205,25 +203,24 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
 
                     JSONObject jsonObject = response.getJSONObject("api"); // on se positionne dans l'array standings (classement)
 
-                        for (int i = 0; i < 20; i++) {
-                            //JSONObject api = jsonArray.getJSONObject(0); //on se positionne au 1er objet (api)
-                            JSONArray standings = jsonObject.getJSONArray("standings");
-                            JSONArray table = standings.getJSONArray(0);
-                            JSONObject team = table.getJSONObject(i);
-                            String nameTeam = team.getString("teamName");
-                            String points = team.getString("points");
-                            String points2 = points + " pts"; // A REFAIRE
-                            String placeTeam = String.valueOf(i + 1);
+                    for (int i = 0; i < 20; i++) {
+                        //JSONObject api = jsonArray.getJSONObject(0); //on se positionne au 1er objet (api)
+                        JSONArray standings = jsonObject.getJSONArray("standings");
+                        JSONArray table = standings.getJSONArray(0);
+                        JSONObject team = table.getJSONObject(i);
+                        String nameTeam = team.getString("teamName");
+                        String points = team.getString("points");
+                        String points2 = points + " pts"; // A REFAIRE
+                        String placeTeam = String.valueOf(i + 1);
 
-                            String logoTeam = team.getString("logo");
+                        String logoTeam = team.getString("logo");
 
-                            League league = new League(nameTeam, points2, placeTeam, logoTeam);
-                            ranking.add(league);
+                        League league = new League(nameTeam, points2, placeTeam, logoTeam);
+                        ranking.add(league);
 
-                        }
+                    }
                     DisplayRanking(ranking);
-                }
-                catch (JSONException e){
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
@@ -232,23 +229,22 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
             }
-        }){
+        }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 String key = BuildConfig.ApiKey;
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("Content-Type", "application/json");
-                params.put("x-rapidapi-key",key);
+                params.put("x-rapidapi-key", key);
                 return params;
             }
         };
         queue.add(matchesReq);
     }
 
-    private void GetGoalScorersRanking(String idLeague)
-    {
+    private void GetGoalScorersRanking(String idLeague) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = String.format("https://api.football-data.org/v2/competitions/%s/scorers?limit=30",idLeague);
+        String url = String.format("https://api.football-data.org/v2/competitions/%s/scorers?limit=30", idLeague);
 
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -259,8 +255,7 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
                     JSONArray jsonArray = response.getJSONArray("scorers");
 
 
-                    for(int i = 0; i < 30; i++)
-                    {
+                    for (int i = 0; i < 30; i++) {
                         JSONObject buteurs = jsonArray.getJSONObject(i);
                         JSONObject player = buteurs.getJSONObject("player");
                         String namePlayer = player.getString("name");
@@ -274,8 +269,6 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
                     DisplayGoalScorersRanking(goalScorersRanking);
 
 
-
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -287,12 +280,9 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
                 error.printStackTrace();
 
             }
-        })
-
-        {
+        }) {
             //Methode permettant de mettre la clé d'api dans le header
-            public Map getHeaders() throws AuthFailureError
-            {
+            public Map getHeaders() throws AuthFailureError {
                 HashMap headers = new HashMap();
                 String apiKey = BuildConfig.ApiKey; // securisation de la clé d'API, ajoutée dans gradle.properties et build.gradle
                 headers.put("x-rapidapi-key", apiKey);
@@ -307,80 +297,82 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         String pos = String.valueOf(parent.getItemIdAtPosition(position));
-        String leagueName = "";
+        int idLeague = 0;
 
         // Here we check what the is ID of the value in the Spinner which indicates what league is selected
-        switch (pos){
+        switch (pos) {
             case "0":
-                GetRanking();
+                idLeague = 525;
+                GetRanking(idLeague);
 
-                final String finalLeagueName = leagueName;
+                final int finalLeagueId = idLeague;
                 goalScorersButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        GetGoalScorersRanking(finalLeagueName);
+                        //GetGoalScorersRanking(finalLeagueName);
                     }
                 });
                 break;
 
-                case "1":
-                leagueName = "PL";
-                GetRanking(leagueName);
+            case "1":
+                idLeague = 524;
+                GetRanking(idLeague);
 
-                final String finalLeagueName2 = leagueName;
+                final int finalLeagueId2 = idLeague;
                 goalScorersButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        GetGoalScorersRanking(finalLeagueName2);
+                        //GetGoalScorersRanking(finalLeagueName2);
                     }
                 });
                 break;
 
-                case "2":
-                leagueName = "PD";
-                GetRanking(leagueName);
+            case "2":
+                idLeague = 775;
+                GetRanking(idLeague);
 
-                final String finalLeagueName3 = leagueName;
+                final int finalLeagueId3 = idLeague;
                 goalScorersButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            GetGoalScorersRanking(finalLeagueName3);
-                        }
+                    @Override
+                    public void onClick(View v) {
+                        //GetGoalScorersRanking(finalLeagueName3);
+                    }
                 });
                 break;
 
-                case "3":
-                leagueName = "BL1";
-                GetRanking(leagueName);
+            case "3":
+                idLeague = 754;
+                GetRanking(idLeague);
 
-                    final String finalLeagueName4 = leagueName;
-                    goalScorersButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            GetGoalScorersRanking(finalLeagueName4);
-                        }
-                    });
+                final int finalLeagueId4 = idLeague;
+                goalScorersButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //GetGoalScorersRanking(finalLeagueName4);
+                    }
+                });
                 break;
 
-                case "4":
-                leagueName = "SA";
-                GetRanking(leagueName);
+            case "4":
+                idLeague = 891;
+                GetRanking(idLeague);
 
-                    final String finalLeagueName5 = leagueName;
-                    goalScorersButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            GetGoalScorersRanking(finalLeagueName5);
-                        }
-                    });
+                final int finalLeagueId5 = idLeague;
+                goalScorersButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //GetGoalScorersRanking(finalLeagueName5);
+                    }
+                });
                 break;
 
-                case "5":
+            case "5":
                 Toast.makeText(this, "Pas encore disponible !", Toast.LENGTH_LONG).show();
 
 
         }
     }
+
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
