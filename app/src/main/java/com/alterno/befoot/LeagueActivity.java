@@ -111,7 +111,8 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
     private void GetRanking(final String idLeague){
         RequestQueue queue = Volley.newRequestQueue(this);
 
-        String url = String.format("https://api.football-data.org/v2/competitions/%s/standings",idLeague);
+        //String url = String.format("https://api.football-data.org/v2/competitions/%s/standings",idLeague);
+        String url = "https://api-football-v1.p.rapidapi.com/v2/leagueTable/4";
 
         JsonObjectRequest matchesReq = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -123,7 +124,7 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
                     //String nameCompetition = jsonObject.getString("name"); // on récupère le nom de la competition
                     //team.setText(nameCompetition);
 
-                    JSONArray jsonArray = response.getJSONArray("standings"); // on se positionne dans l'array standings (classement)
+                    JSONArray jsonArray = response.getJSONArray("api"); // on se positionne dans l'array standings (classement)
 
                     if(idLeague == "BL1")
                     {
@@ -147,16 +148,16 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
                     else
 
                     for (int i = 0; i < 20; i++) {
-                        JSONObject standings = jsonArray.getJSONObject(0); //on se positionne au 1er objet (classement général)
-                        JSONArray table = standings.getJSONArray("table");
+                        //JSONObject api = jsonArray.getJSONObject(0); //on se positionne au 1er objet (api)
+                        JSONArray standings = response.getJSONArray("standings");
+                        JSONArray table = standings.getJSONArray(0);
                         JSONObject team = table.getJSONObject(i);
-                        JSONObject team1 = team.getJSONObject("team");
-                        String nameTeam = team1.getString("name");
+                        String nameTeam = team.getString("teamName");
                         String points = team.getString("points");
                         String points2 = points + " pts"; // A REFAIRE
                         String placeTeam = String.valueOf(i + 1);
 
-                        String logoTeam = team1.getString("crestUrl");
+                        String logoTeam = team.getString("logo");
 
                         League league = new League(nameTeam, points2, placeTeam, logoTeam);
                         ranking.add(league);
@@ -179,7 +180,65 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
                 String key = BuildConfig.ApiKey;
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("Content-Type", "application/json");
-                params.put("X-Auth-Token",key);
+                params.put("x-rapidapi-key",key);
+                return params;
+            }
+        };
+        queue.add(matchesReq);
+    }
+
+    private void GetRanking(){
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        //String url = String.format("https://api.football-data.org/v2/competitions/%s/standings",idLeague);
+        String url = "https://api-football-v1.p.rapidapi.com/v2/leagueTable/4";
+
+        JsonObjectRequest matchesReq = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try{
+                    List<League> ranking = new ArrayList<>();
+
+                    //JSONObject jsonObject = response.getJSONObject("competition"); // on se positionne dans l'objet competition
+                    //String nameCompetition = jsonObject.getString("name"); // on récupère le nom de la competition
+                    //team.setText(nameCompetition);
+
+                    JSONObject jsonObject = response.getJSONObject("api"); // on se positionne dans l'array standings (classement)
+
+                        for (int i = 0; i < 20; i++) {
+                            //JSONObject api = jsonArray.getJSONObject(0); //on se positionne au 1er objet (api)
+                            JSONArray standings = jsonObject.getJSONArray("standings");
+                            JSONArray table = standings.getJSONArray(0);
+                            JSONObject team = table.getJSONObject(i);
+                            String nameTeam = team.getString("teamName");
+                            String points = team.getString("points");
+                            String points2 = points + " pts"; // A REFAIRE
+                            String placeTeam = String.valueOf(i + 1);
+
+                            String logoTeam = team.getString("logo");
+
+                            League league = new League(nameTeam, points2, placeTeam, logoTeam);
+                            ranking.add(league);
+
+                        }
+                    DisplayRanking(ranking);
+                }
+                catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                String key = BuildConfig.ApiKey;
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json");
+                params.put("x-rapidapi-key",key);
                 return params;
             }
         };
@@ -236,7 +295,7 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
             {
                 HashMap headers = new HashMap();
                 String apiKey = BuildConfig.ApiKey; // securisation de la clé d'API, ajoutée dans gradle.properties et build.gradle
-                headers.put("X-Auth-Token", apiKey);
+                headers.put("x-rapidapi-key", apiKey);
                 return headers;
 
             }
@@ -253,8 +312,7 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
         // Here we check what the is ID of the value in the Spinner which indicates what league is selected
         switch (pos){
             case "0":
-                leagueName = "FL1";
-                GetRanking(leagueName);
+                GetRanking();
 
                 final String finalLeagueName = leagueName;
                 goalScorersButton.setOnClickListener(new View.OnClickListener() {
