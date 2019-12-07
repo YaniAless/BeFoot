@@ -68,7 +68,6 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //GetRanking("FL1"); // à faire : choisir son championnat
         setContentView(R.layout.activity_league);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -105,87 +104,6 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
         Log.i("TESTS", "Matches list : " + goalScorersRanking.size());
     }
 
-
-
-    /*private void GetRanking(final String idLeague){
-        RequestQueue queue = Volley.newRequestQueue(this);
-
-        //String url = String.format("https://api.football-data.org/v2/competitions/%s/standings",idLeague);
-        String url = "https://api-football-v1.p.rapidapi.com/v2/leagueTable/525";
-
-        JsonObjectRequest matchesReq = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try{
-                    List<League> ranking = new ArrayList<>();
-
-                    //JSONObject jsonObject = response.getJSONObject("competition"); // on se positionne dans l'objet competition
-                    //String nameCompetition = jsonObject.getString("name"); // on récupère le nom de la competition
-                    //team.setText(nameCompetition);
-
-                    JSONArray jsonArray = response.getJSONArray("api"); // on se positionne dans l'array standings (classement)
-
-                    if(idLeague == "BL1")
-                    {
-                        for (int i = 0; i < 18; i++) {
-                            JSONObject standings = jsonArray.getJSONObject(0); //on se positionne au 1er objet (classement général)
-                            JSONArray table = standings.getJSONArray("table");
-                            JSONObject team = table.getJSONObject(i);
-                            JSONObject team1 = team.getJSONObject("team");
-                            String nameTeam = team1.getString("name");
-                            String points = team.getString("points");
-                            String points2 = points + " pts"; // A REFAIRE
-                            String placeTeam = String.valueOf(i + 1);
-
-                            String logoTeam = team1.getString("crestUrl");
-
-                            League league = new League(nameTeam, points2, placeTeam, logoTeam);
-                            ranking.add(league);
-
-                        }
-                    }
-                    else
-
-                    for (int i = 0; i < 20; i++) {
-                        //JSONObject api = jsonArray.getJSONObject(0); //on se positionne au 1er objet (api)
-                        JSONArray standings = response.getJSONArray("standings");
-                        JSONArray table = standings.getJSONArray(0);
-                        JSONObject team = table.getJSONObject(i);
-                        String nameTeam = team.getString("teamName");
-                        String points = team.getString("points");
-                        String points2 = points + " pts"; // A REFAIRE
-                        String placeTeam = String.valueOf(i + 1);
-
-                        String logoTeam = team.getString("logo");
-
-                        League league = new League(nameTeam, points2, placeTeam, logoTeam);
-                        ranking.add(league);
-
-                    }
-                    DisplayRanking(ranking);
-                }
-                catch (JSONException e){
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                String key = BuildConfig.ApiKey;
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json");
-                params.put("x-rapidapi-key",key);
-                return params;
-            }
-        };
-        queue.add(matchesReq);
-    }*/
-
     private void GetRanking(final int idLeague) {
         RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -197,27 +115,41 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
                 try {
                     List<League> ranking = new ArrayList<>();
 
-                    //JSONObject jsonObject = response.getJSONObject("competition"); // on se positionne dans l'objet competition
-                    //String nameCompetition = jsonObject.getString("name"); // on récupère le nom de la competition
-                    //team.setText(nameCompetition);
-
                     JSONObject jsonObject = response.getJSONObject("api"); // on se positionne dans l'array standings (classement)
 
-                    for (int i = 0; i < 20; i++) {
-                        //JSONObject api = jsonArray.getJSONObject(0); //on se positionne au 1er objet (api)
-                        JSONArray standings = jsonObject.getJSONArray("standings");
-                        JSONArray table = standings.getJSONArray(0);
-                        JSONObject team = table.getJSONObject(i);
-                        String nameTeam = team.getString("teamName");
-                        String points = team.getString("points");
-                        String points2 = points + " pts"; // A REFAIRE
-                        String placeTeam = String.valueOf(i + 1);
+                    if(idLeague == 754)
+                    {
+                        for (int i = 0; i < 18; i++) {
+                            JSONArray standings = jsonObject.getJSONArray("standings");
+                            JSONArray table = standings.getJSONArray(0);
+                            JSONObject team = table.getJSONObject(i);
+                            String nameTeam = team.getString("teamName"); // nom de l'équipe
+                            String points = team.getString("points"); // nombre de points
+                            String points2 = points + " pts"; // A REFAIRE
+                            String placeTeam = String.valueOf(i + 1); // place de l'équipe
+                            String logoTeam = team.getString("logo"); // url du logo
 
-                        String logoTeam = team.getString("logo");
+                            League league = new League(nameTeam, points2, placeTeam, logoTeam);
+                            ranking.add(league);
 
-                        League league = new League(nameTeam, points2, placeTeam, logoTeam);
-                        ranking.add(league);
+                        }
+                    }
+                    else {
 
+                        for (int i = 0; i < 20; i++) {
+                            JSONArray standings = jsonObject.getJSONArray("standings");
+                            JSONArray table = standings.getJSONArray(0);
+                            JSONObject team = table.getJSONObject(i);
+                            String nameTeam = team.getString("teamName"); // nom de l'équipe
+                            String points = team.getString("points"); // nombre de points
+                            String points2 = points + " pts"; // A REFAIRE
+                            String placeTeam = String.valueOf(i + 1); // place de l'équipe
+                            String logoTeam = team.getString("logo"); // url du logo
+
+                            League league = new League(nameTeam, points2, placeTeam, logoTeam);
+                            ranking.add(league);
+
+                        }
                     }
                     DisplayRanking(ranking);
                 } catch (JSONException e) {
