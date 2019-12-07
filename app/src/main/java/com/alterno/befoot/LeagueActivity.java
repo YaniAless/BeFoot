@@ -44,7 +44,6 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
     private TextView placeTeam;
     private TextView titleLeague;
 
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -117,8 +116,7 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
 
                     JSONObject jsonObject = response.getJSONObject("api"); // on se positionne dans l'array standings (classement)
 
-                    if(idLeague == 754)
-                    {
+                    if (idLeague == 754) {
                         for (int i = 0; i < 18; i++) {
                             JSONArray standings = jsonObject.getJSONArray("standings");
                             JSONArray table = standings.getJSONArray(0);
@@ -133,8 +131,7 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
                             ranking.add(league);
 
                         }
-                    }
-                    else {
+                    } else {
 
                         for (int i = 0; i < 20; i++) {
                             JSONArray standings = jsonObject.getJSONArray("standings");
@@ -148,7 +145,6 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
 
                             League league = new League(nameTeam, points2, placeTeam, logoTeam);
                             ranking.add(league);
-
                         }
                     }
                     DisplayRanking(ranking);
@@ -174,32 +170,32 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
         queue.add(matchesReq);
     }
 
-    private void GetGoalScorersRanking(String idLeague) {
+    private void GetGoalScorersRanking(final int idLeague) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = String.format("https://api.football-data.org/v2/competitions/%s/scorers?limit=30", idLeague);
 
+        String url = String.format("https://api-football-v1.p.rapidapi.com/v2/topscorers/%s", idLeague);
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     List<Player> goalScorersRanking = new ArrayList<>();
-                    JSONArray jsonArray = response.getJSONArray("scorers");
 
+                    JSONObject jsonObject = response.getJSONObject("api");
 
-                    for (int i = 0; i < 30; i++) {
-                        JSONObject buteurs = jsonArray.getJSONObject(i);
-                        JSONObject player = buteurs.getJSONObject("player");
-                        String namePlayer = player.getString("name");
-                        JSONObject team = buteurs.getJSONObject("team");
-                        String nameTeam = team.getString("name");
-                        int nbGoals = buteurs.getInt("numberOfGoals");
-                        String nbGoals2 = String.valueOf(nbGoals) + " buts";
-                        Player goalScorer = new Player(namePlayer, nameTeam, nbGoals2);
+                    for (int i = 0; i < 20; i++) {
+                        JSONArray topscorersArray = jsonObject.getJSONArray("topscorers");
+                        JSONObject player = topscorersArray.getJSONObject(i);
+                        String playerName = player.getString("player_name");
+                        String teamName = player.getString("team_name");
+                        JSONObject goalsObject = player.getJSONObject("goals");
+                        int goals = goalsObject.getInt("total");
+                        String goalsFormatted = String.valueOf(goals) + " buts";
+
+                        Player goalScorer = new Player(playerName, teamName, goalsFormatted);
                         goalScorersRanking.add(goalScorer);
                     }
                     DisplayGoalScorersRanking(goalScorersRanking);
-
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -219,10 +215,8 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
                 String apiKey = BuildConfig.ApiKey; // securisation de la clé d'API, ajoutée dans gradle.properties et build.gradle
                 headers.put("x-rapidapi-key", apiKey);
                 return headers;
-
             }
         };
-
         queue.add(request);
     }
 
@@ -241,7 +235,7 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
                 goalScorersButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //GetGoalScorersRanking(finalLeagueName);
+                        GetGoalScorersRanking(finalLeagueId);
                     }
                 });
                 break;
@@ -254,7 +248,7 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
                 goalScorersButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //GetGoalScorersRanking(finalLeagueName2);
+                        GetGoalScorersRanking(finalLeagueId2);
                     }
                 });
                 break;
@@ -267,7 +261,7 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
                 goalScorersButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //GetGoalScorersRanking(finalLeagueName3);
+                        GetGoalScorersRanking(finalLeagueId3);
                     }
                 });
                 break;
@@ -280,7 +274,7 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
                 goalScorersButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //GetGoalScorersRanking(finalLeagueName4);
+                        GetGoalScorersRanking(finalLeagueId4);
                     }
                 });
                 break;
@@ -293,15 +287,15 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
                 goalScorersButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //GetGoalScorersRanking(finalLeagueName5);
+                        GetGoalScorersRanking(finalLeagueId5);
                     }
                 });
                 break;
 
             case "5":
-                Toast.makeText(this, "Pas encore disponible !", Toast.LENGTH_LONG).show();
-
-
+                idLeague = 530;
+                GetGoalScorersRanking(idLeague);
+                break;
         }
     }
 
