@@ -186,13 +186,14 @@ public class LeagueActivity extends AppCompatActivity implements AdapterView.OnI
                     for (int i = 0; i < 20; i++) {
                         JSONArray topscorersArray = jsonObject.getJSONArray("topscorers");
                         JSONObject player = topscorersArray.getJSONObject(i);
+                        String placeScorer = String.valueOf(i + 1);
                         String playerName = player.getString("player_name");
                         String teamName = player.getString("team_name");
                         JSONObject goalsObject = player.getJSONObject("goals");
                         int goals = goalsObject.getInt("total");
                         String goalsFormatted = String.valueOf(goals) + " buts";
 
-                        Player goalScorer = new Player(playerName, teamName, goalsFormatted);
+                        Player goalScorer = new Player(placeScorer, playerName, teamName, goalsFormatted);
                         goalScorersRanking.add(goalScorer);
                     }
                     DisplayGoalScorersRanking(goalScorersRanking);

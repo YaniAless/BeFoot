@@ -6,7 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -29,6 +32,8 @@ public class MatchAdapter extends ArrayAdapter<Match> {
             viewHolder.awayTeam = (TextView) convertView.findViewById(R.id.awayTeamTxt);
             viewHolder.homeTeamScore = (TextView) convertView.findViewById(R.id.homeTeamScore);
             viewHolder.awayTeamScore = (TextView) convertView.findViewById(R.id.awayTeamScore);
+            viewHolder.homeTeamLogo = convertView.findViewById(R.id.homeTeamLogo);
+            viewHolder.awayTeamLogo = convertView.findViewById(R.id.awayTeamLogo);
             convertView.setTag(viewHolder);
         }
 
@@ -38,6 +43,8 @@ public class MatchAdapter extends ArrayAdapter<Match> {
         viewHolder.awayTeam.setText(match.getAwayTeam());
         viewHolder.homeTeamScore.setText(match.getHomeTeamScore());
         viewHolder.awayTeamScore.setText(match.getAwayTeamScore());
+        Picasso.get().load(match.getHomeTeamLogo()).into(viewHolder.homeTeamLogo);
+        Picasso.get().load(match.getAwayTeamLogo()).into(viewHolder.awayTeamLogo);
 
         return convertView;
     }
@@ -47,6 +54,8 @@ public class MatchAdapter extends ArrayAdapter<Match> {
         public TextView awayTeam;
         public TextView homeTeamScore;
         public TextView awayTeamScore;
+        public ImageView homeTeamLogo;
+        public ImageView awayTeamLogo;
     }
 
 }

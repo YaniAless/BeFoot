@@ -14,14 +14,16 @@ public class Match {
     private String matchDay;
     private String matchDate;
 
-    private ImageView homeTeamImg;
-    private ImageView awayTeamImg;
+    private String homeTeamLogo;
+    private String awayTeamLogo;
 
-    public Match(String homeTeam, String awayTeam, String homeTeamScore, String awayTeamScore) {
+    public Match(String homeTeam, String awayTeam, String homeTeamScore, String awayTeamScore, String homeTeamLogo, String awayTeamLogo) {
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
         this.homeTeamScore = homeTeamScore;
         this.awayTeamScore = awayTeamScore;
+        this.homeTeamLogo = homeTeamLogo;
+        this.awayTeamLogo = awayTeamLogo;
     }
 
     public Match(String homeTeam, String awayTeam, String homeTeamScore, String awayTeamScore, String matchStatus, String matchDay, String matchDate) {
@@ -39,8 +41,8 @@ public class Match {
         this.awayTeam = awayTeam;
         this.homeTeamScore = homeTeamScore;
         this.awayTeamScore = awayTeamScore;
-        this.homeTeamImg = homeTeamImg;
-        this.awayTeamImg = awayTeamImg;
+        this.homeTeamLogo = homeTeamLogo;
+        this.awayTeamLogo = awayTeamLogo;
         this.matchLeague = matchLeague;
     }
 
@@ -53,8 +55,8 @@ public class Match {
         this.matchStatus = matchStatus;
         this.matchDay = matchDay;
         this.matchDate = matchDate;
-        this.homeTeamImg = homeTeamImg;
-        this.awayTeamImg = awayTeamImg;
+        this.homeTeamLogo = homeTeamLogo;
+        this.awayTeamLogo = awayTeamLogo;
     }
 
     public String getMatchStatus() {
@@ -116,21 +118,6 @@ public class Match {
         this.awayTeamScore = awayTeamScore;
     }
 
-    public ImageView getHomeTeamImg() {
-        return homeTeamImg;
-    }
-
-    public void setHomeTeamImg(ImageView homeTeamImg) {
-        this.homeTeamImg = homeTeamImg;
-    }
-
-    public ImageView getAwayTeamImg() {
-        return awayTeamImg;
-    }
-
-    public void setAwayTeamImg(ImageView awayTeamImg) {
-        this.awayTeamImg = awayTeamImg;
-    }
 
     public League getMatchLeague() {
         return matchLeague;
@@ -138,5 +125,21 @@ public class Match {
 
     public void setMatchLeague(League matchLeague) {
         this.matchLeague = matchLeague;
+    }
+
+    public String getHomeTeamLogo() {
+        return homeTeamLogo;
+    }
+
+    public void setHomeTeamLogo(String homeTeamLogo) {
+        this.homeTeamLogo = homeTeamLogo;
+    }
+
+    public String getAwayTeamLogo() {
+        return awayTeamLogo;
+    }
+
+    public void setAwayTeamLogo(String awayTeamLogo) {
+        this.awayTeamLogo = awayTeamLogo;
     }
 }

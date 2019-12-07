@@ -26,14 +26,16 @@ public class PlayerAdapter extends ArrayAdapter<Player> {
         LeagueViewHolder viewHolder = (LeagueViewHolder) convertView.getTag();
         if(viewHolder == null){
             viewHolder = new LeagueViewHolder();
-            viewHolder.namePlayer = (TextView) convertView.findViewById(R.id.namePlayer);
-            viewHolder.nameTeam = (TextView) convertView.findViewById(R.id.nameTeam);
-            viewHolder.nbGoals = (TextView) convertView.findViewById(R.id.nbGoals);
+            viewHolder.placeScorer = convertView.findViewById(R.id.placeScorer);
+            viewHolder.namePlayer = convertView.findViewById(R.id.namePlayer);
+            viewHolder.nameTeam =  convertView.findViewById(R.id.nameTeam);
+            viewHolder.nbGoals =  convertView.findViewById(R.id.nbGoals);
             convertView.setTag(viewHolder);
         }
 
         Player player = getItem(position);
 
+        viewHolder.placeScorer.setText(player.getPlaceScorer());
         viewHolder.namePlayer.setText(player.getNamePlayer());
         viewHolder.nameTeam.setText(player.getNameTeam());
         viewHolder.nbGoals.setText(player.getNbGoals());
@@ -43,6 +45,7 @@ public class PlayerAdapter extends ArrayAdapter<Player> {
     }
 
     private class LeagueViewHolder{
+        public TextView placeScorer;
         public  TextView namePlayer;
         public TextView nameTeam;
         public TextView nbGoals;

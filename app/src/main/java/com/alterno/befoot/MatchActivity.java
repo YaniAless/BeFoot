@@ -113,7 +113,7 @@ public class MatchActivity extends AppCompatActivity implements AdapterView.OnIt
 
         String fDate = null;
         String apiDate = null;
-        String leagueId = null;
+        int leagueId = 0;
 
         switch (action){
             case 'p':
@@ -167,10 +167,10 @@ public class MatchActivity extends AppCompatActivity implements AdapterView.OnIt
         }
     }
 
-    private void GetMatchOfTheDayByLeague(String leagueId, String myDate){
+    private void GetMatchOfTheDayByLeague(int leagueId, String myDate){
 
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = String.format("https://api.football-data.org/v2/competitions/%s/matches?dateFrom=%s&dateTo=%s",leagueId,myDate,myDate);
+        String url = String.format("https://api-football-v1.p.rapidapi.com/v2/fixtures/league/%s/%s?timezone=Europe/Paris", leagueId, myDate);
 
         JsonObjectRequest matchesReq = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -178,26 +178,25 @@ public class MatchActivity extends AppCompatActivity implements AdapterView.OnIt
                 try{
                     List<Match> matchesList = new ArrayList<>();
 
-                    JSONArray arrMatches = response.getJSONArray("matches");
+                    JSONObject jsonObject = response.getJSONObject("api");
+                    JSONArray fixtures = jsonObject.getJSONArray("fixtures");
 
-                    for (int i = 0; i < arrMatches.length();i++){
-                        JSONObject match = arrMatches.getJSONObject(i);
+                    for (int i = 0; i < fixtures.length();i++){
+                        JSONObject match = fixtures.getJSONObject(i);
 
-                        String homeTeam = match.getJSONObject("homeTeam").getString("name");
-                        String awayTeam = match.getJSONObject("awayTeam").getString("name");
-                        String homeTeamScore = match.getJSONObject("score").getJSONObject("fullTime").getString("homeTeam");
-                        String awayTeamScore = match.getJSONObject("score").getJSONObject("fullTime").getString("awayTeam");
+                        String homeTeam = match.getJSONObject("homeTeam").getString("team_name");
+                        String awayTeam = match.getJSONObject("awayTeam").getString("team_name");
+                        String homeTeamLogo = match.getJSONObject("homeTeam").getString("logo");
+                        String awayTeamLogo = match.getJSONObject("awayTeam").getString("logo");
+                        String homeTeamScore = match.getString("goalsHomeTeam");
+                        String awayTeamScore = match.getString("goalsAwayTeam");
 
                         if(homeTeamScore == "null" || awayTeamScore == "null"){
                             homeTeamScore = "-";
                             awayTeamScore = "-";
                         }
 
-                        String matchStatus = match.getString("status");
-                        String matchDay = match.getString("matchday");
-                        String matchDate = match.getString("utcDate");
-
-                        Match matchOfTheDay = new Match(homeTeam,awayTeam,homeTeamScore,awayTeamScore,matchStatus,matchDay,matchDate);
+                        Match matchOfTheDay = new Match(homeTeam,awayTeam,homeTeamScore,awayTeamScore,homeTeamLogo,awayTeamLogo);
                         matchesList.add(matchOfTheDay);
                     }
                     DisplayMatchesOfTheDay(matchesList);
@@ -219,7 +218,7 @@ public class MatchActivity extends AppCompatActivity implements AdapterView.OnIt
             String key = BuildConfig.ApiKey;
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("Content-Type", "application/json");
-                params.put("X-Auth-Token",key);
+                params.put("x-rapidapi-key",key);
                 return params;
             }
         };
@@ -240,58 +239,56 @@ public class MatchActivity extends AppCompatActivity implements AdapterView.OnIt
         return currentDate;
     }
 
-    private String GetLeagueIdWithPos(String pos){
+    private int GetLeagueIdWithPos(String pos){
         switch (pos){
             case "0":
-                return "FL1";
+                return 525;
             case "1":
-                return "PL";
+                return 524;
             case "2":
-                return "PD";
+                return 775;
             case "3":
-                return "BL1";
+                return 754;
             case "4":
-                return "SA";
+                return 891;
             case "5":
-                return "CL";
+                return 530;
         }
-        return "Can't get league ID";
+        return 525;
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         String pos = String.valueOf(parent.getItemIdAtPosition(position));
-        String leagueName = null;
+        int idLeague = 0;
 
         // Here we check what the is ID of the value in the Spinner which indicates what league is selected
         switch (pos){
             case "0":
-                leagueName = "FL1";
-                GetMatchOfTheDayByLeague(leagueName, BuildDateForApi());
-
+                idLeague = 525;
+                GetMatchOfTheDayByLeague(idLeague, BuildDateForApi());
                 break;
             case "1":
-                leagueName = "PL";
-                GetMatchOfTheDayByLeague(leagueName, BuildDateForApi());
+                idLeague = 524;
+                GetMatchOfTheDayByLeague(idLeague, BuildDateForApi());
                 break;
             case "2":
-                leagueName = "PD";
-                GetMatchOfTheDayByLeague(leagueName, BuildDateForApi());
+                idLeague = 775;
+                GetMatchOfTheDayByLeague(idLeague, BuildDateForApi());
                 break;
             case "3":
-                leagueName = "BL1";
-
-                GetMatchOfTheDayByLeague(leagueName, BuildDateForApi());
+                idLeague = 754;
+                GetMatchOfTheDayByLeague(idLeague, BuildDateForApi());
                 break;
             case "4":
-                leagueName = "SA";
-                GetMatchOfTheDayByLeague(leagueName, BuildDateForApi());
+                idLeague = 891;
+                GetMatchOfTheDayByLeague(idLeague, BuildDateForApi());
                 break;
 
             case "5":
-                leagueName= "CL";
-                GetMatchOfTheDayByLeague(leagueName, BuildDateForApi());
+                idLeague = 530;
+                GetMatchOfTheDayByLeague(idLeague, BuildDateForApi());
                 break;
 
         }

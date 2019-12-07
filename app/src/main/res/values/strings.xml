@@ -17,6 +17,7 @@
     <string name="awayteam_default">Away Team</string>
     <string name="nameTeamDefault">nameTeam</string>
     <string name="nbPointsDefault">0</string>
+    <string name="placeScorerDefault">0</string>
     <string name="btnprev_desc">previous date</string>
     <string name="btnnext_desc">next date</string>
     <string name="nameScorerDefault">nameScorer</string>
